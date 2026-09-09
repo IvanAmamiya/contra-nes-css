@@ -54,6 +54,12 @@ NES 首关稳定版本为 `v1.2.2`，保留在 `main` 分支。`feature/sfc-cont
 
 发布静态网站执行 `npm run build`，输出到 `dist/`。构建会校验各 HTML 页引用的本地文件，只复制游玩、素材浏览、回归页及说明所需文件，不包含 Git 元数据或构建用原始图片。
 
+### Vercel
+
+已经提供 `vercel.json`：使用纯静态构建，跳过依赖安装，发布 `dist/`。不需要把本地 `server.cjs` 部署为服务端函数。Vercel 的安装与输出配置见 [官方说明](https://vercel.com/docs/project-configuration/vercel-json)。
+
+首次部署在本目录执行 `npx vercel login`，登录后执行 `npx vercel --prod`；已关联项目后可执行 `npx vercel --prod --yes`。`.vercel/` 中的本地项目关联不进入 Git，`.vercelignore` 排除 Git、其他托管平台配置及构建用原图；保留回归页需要的两个浏览器脚本。
+
 ## 测试与代码
 
 ```sh

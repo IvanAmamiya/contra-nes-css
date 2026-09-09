@@ -1,8 +1,12 @@
 node_modules/
 dist/
 .sites-runtime/
+.vercel/
 *.log
 *.tgz
 *.tar.gz
 .env
 .env.*
+
+.vercel
+.env*

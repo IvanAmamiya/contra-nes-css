@@ -1,0 +1,12 @@
+.git
+.openai
+.sites-runtime
+.vercel
+node_modules
+dist
+.env
+.env.*
+*.log
+assets/source
+assets/background-source
+tests/*.test.cjs
