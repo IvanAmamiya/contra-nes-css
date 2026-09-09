@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111111">
+  <title>魂斗罗 1 · JavaScript 首关</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='black'/%3E%3Cpath d='M5 8h22v6H11v5h16v6H5z' fill='%23f83800'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="css-renderer.css">
+  <link rel="stylesheet" href="assets/stage1.css"><link rel="stylesheet" href="assets/nes-sprites.css"><link rel="stylesheet" href="assets/nes-patches-fast.css"><script defer src="assets/manifest.js"></script><script defer src="assets/backgrounds.js"></script>
+  <script defer src="assets/stage1.js"></script><script defer src="core.js"></script><script defer src="css-renderer.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+  <main class="game-page">
+    <header><h1>魂斗罗 1</h1><span>JAVASCRIPT / 第一关</span><div><button id="sound-button" aria-pressed="false">声音：关</button><button id="pause-button" disabled>暂停</button></div></header>
+    <section class="screen" id="screen" aria-label="魂斗罗第一关">
+      <div id="game" role="img" tabindex="0" aria-label="魂斗罗游戏。WASD 或方向键移动与瞄准，J 射击，K 或空格跳跃，H 连发，Enter 暂停。"></div>
+      <div class="menu" id="menu">
+        <h2 class="sr-only" id="menu-title">魂斗罗 1</h2>
+        <p id="menu-info">第一关 · 丛林</p>
+        <button id="start-button">▶ 1 PLAYER</button>
+        <p class="menu-hint" id="menu-hint">ENTER 开始</p>
+      </div>
+      <p class="sr-only" id="live-status" aria-live="polite">待机</p>
+    </section>
+    <div class="readout" aria-label="游戏状态"><span id="state-label">待机</span><span id="lives">生命 3</span><span id="weapon">武器 N</span><span id="score">得分 000000</span></div>
+    <div class="touch-controls" aria-label="触屏操作">
+      <div class="dpad"><button data-control="up" aria-label="向上瞄准">↑</button><button data-control="left" aria-label="向左移动">←</button><button data-control="down" aria-label="趴下或向下瞄准">↓</button><button data-control="right" aria-label="向右移动">→</button></div>
+      <div class="touch-actions"><button data-control="turbo" aria-label="连发射击">连发</button><button data-control="fire" aria-label="射击">B<br><small>射击</small></button><button data-control="jump" aria-label="跳跃">A<br><small>跳跃</small></button></div>
+    </div>
+    <div class="instructions"><p><kbd>W A S D</kbd> / <kbd>方向键</kbd> 移动、八方向瞄准　 <kbd>J</kbd> 射击　 <kbd>K</kbd> / <kbd>空格</kbd> 跳跃　 <kbd>H</kbd> 连发</p><p><kbd>↓</kbd> 趴下 / 潜水　 <kbd>↓ + 跳跃</kbd> 下穿平台　 <kbd>Enter</kbd> / <kbd>P</kbd> 暂停　 <kbd>M</kbd> 声音</p></div>
+    <details><summary>玩法与本版范围</summary><div class="details-content"><p>参照 FC / NES《魂斗罗》一代首关。默认三条命，一击死亡；死亡后失去强化武器，并在当前画面复活。镜头只向右推进。摧毁关底碉堡下方的红色核心即可通关。</p><p>J 为普通射击；M 机枪、L 激光支持按住 J 连射。H 模拟连发手柄。打掉飞行胶囊或固定补给箱，拾取 M 机枪、S 散弹、L 激光、F 火球；N 表示初始普通枪，R 提高弹速。达到 20,000 分奖励生命，之后每 30,000 分再奖励一次。</p><p>当前是单人第一关 MVP。精灵来自参考仓库，场景使用 NES Maps 原版像素图块，全部由 CSS 绘制，音效由程序合成。已接入原版十三屏布局、地面数据和固定对象配置；敌人状态机与部分武器细节仍有简化；未包含双人、后七关及原版音乐。</p><p>暂停后可按 R 重开。标题画面可输入 ↑ ↑ ↓ ↓ ← → ← → B A，开启 30 命练习。<a href="ATTRIBUTION.md">素材来源</a></p></div></details>
+    <footer><span>256 × 224 · CSS 像素 · JavaScript</span><a href="art.html">原版素材浏览</a><a href="README.md">说明与测试记录</a></footer>
+  </main>
+</body>
+</html>
+
+
+
+
+

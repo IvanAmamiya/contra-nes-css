@@ -1,0 +1,14 @@
+{
+  "frames": 600,
+  "stepsPerFrame": 10,
+  "finalState": "won",
+  "camera": 3072,
+  "simulatedSeconds": 76.62,
+  "elapsedMs": 9984,
+  "fps": 60,
+  "renderP95Ms": 0.4,
+  "intervalP95Ms": 16.8,
+  "maxNodes": 144,
+  "canvasElements": 0,
+  "imageElements": 0
+}

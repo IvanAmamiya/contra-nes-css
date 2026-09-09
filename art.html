@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>魂斗罗 · 原版素材浏览</title>
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="css-renderer.css"><link rel="stylesheet" href="assets/nes-sprites.css"><link rel="stylesheet" href="assets/nes-backgrounds.css"><link rel="stylesheet" href="art.css">
+<script defer src="assets/stage1.js"></script><script defer src="core.js"></script><script defer src="assets/manifest.js"></script><script defer src="assets/backgrounds.js"></script><script defer src="assets/native-tiles.js"></script><script defer src="native-pixels.js"></script><script defer src="css-renderer.js"></script><script defer src="art.js"></script></head>
+<body><main class="art-page"><nav><a href="index.html">← 返回游戏</a><a href="ATTRIBUTION.md">来源与范围</a></nav><h1>魂斗罗 · 原版素材</h1><p>所有预览由 CSS 像素绘制。精灵、地图和截图保持来源文件的像素与颜色。</p>
+<section aria-labelledby="sprite-heading"><h2 id="sprite-heading">精灵库</h2><p id="asset-count"></p><label>查找精灵 <input id="asset-search" type="search" placeholder="sprite_17 / p2 / medal" autocomplete="off"></label><div id="sprite-grid" class="sprite-grid"></div></section>
+<section aria-labelledby="map-heading"><h2 id="map-heading">八关背景与参考画面</h2><p>后七关在此浏览素材，可玩的内容仍为第一关。完整来源地图保留作者署名；缩略图包含站点叠加的关卡文字。</p>
+<label>选择画面 <select id="map-select"></select></label><p id="map-status" role="status"></p><div class="map-preview" id="map-preview" role="img" aria-label="纯 CSS 原版地图预览"><div id="map-frame"></div></div>
+<div class="map-controls"><label>横向位置 <input id="map-x" type="range" min="0" max="0" value="0" step="8"></label><label>纵向位置 <input id="map-y" type="range" min="0" max="0" value="0" step="8"></label><button id="map-credit">查看地图来源署名</button></div></section>
+<section aria-labelledby="native-heading"><h2 id="native-heading">原始 NES 图块与调色板</h2><p>从图块匹配记录恢复的原始 8×8、2bpp 图案。保留 NES 调色板索引；此处以 FCEUX 的 RGB 调色板显示。素材库包含记录中的全部组合，尚未与整份 ROM 做穷尽核对。</p><div class="map-controls"><button id="native-prev">上一页图块</button><span id="native-status" role="status"></span><button id="native-next">下一页图块</button></div><div id="native-grid" class="native-grid"></div></section>
+<p>收录：参考仓库全部 233 个精灵文件（236 帧）、八关静态地图、八张关卡缩略图、一张首关对象定位图，以及补充的原始图块数据。当前游戏使用其中的首关素材；素材入库不等于八关玩法和全部动画状态已经实现。</p></main></body></html>

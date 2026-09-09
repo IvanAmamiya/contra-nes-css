@@ -1,0 +1,14 @@
+#game{position:relative;display:block;width:100%;height:100%;overflow:hidden;outline:0;touch-action:none;background:#000}
+.css-stage{position:absolute;left:0;top:0;width:256px;height:224px;transform-origin:0 0;overflow:hidden;isolation:isolate}
+.css-stage [hidden],.nes-art[hidden]{display:none!important}
+.css-background,.css-forest,.css-land,.css-actors,.css-hud,.css-title{position:absolute;inset:0;pointer-events:none}
+.css-land,.css-actors{will-change:transform}.css-background{overflow:hidden}
+.nes-patch{position:absolute;overflow:hidden;transform-origin:0 0;pointer-events:none}.nes-tile{width:8px;height:8px}
+.css-platform,.css-boss-part{position:absolute;left:0;top:0}.css-boss-part{overflow:hidden}.css-boss-part.destroyed{background:#000}.css-boss-part.destroyed>*{display:none}.css-boss-part.hit{filter:brightness(2)}
+.css-overlay{position:absolute;left:24px;top:57px;width:208px;height:113px;padding-top:14px;text-align:center;background:#000;font:bold 14px/20px "Courier New",monospace;color:#fff}
+.css-title{background:#000}.title-caption{position:absolute;left:16px;bottom:11px;color:#888;font:7px monospace;letter-spacing:1px}.reserve-count{position:absolute;left:86px;top:8px;font:bold 8px monospace;color:#fff}
+#game:focus-visible{outline:2px solid #f8bc3c;outline-offset:-2px}
+.contra-logo{clip-path:polygon(0 0,80px 0,80px 32px,192px 32px,192px 72px,0 72px)}
+
+.css-bridge-gap{position:absolute;width:32px;height:32px;background:#000}
+.css-boss-part.hit{background:#ffffff80}

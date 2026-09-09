@@ -1,0 +1,14 @@
+{
+  "frames": 600,
+  "stepsPerFrame": 1,
+  "finalState": "playing",
+  "camera": 524,
+  "simulatedSeconds": 10,
+  "elapsedMs": 10017,
+  "fps": 59.8,
+  "renderP95Ms": 0.3,
+  "intervalP95Ms": 16.8,
+  "maxNodes": 134,
+  "canvasElements": 0,
+  "imageElements": 0
+}

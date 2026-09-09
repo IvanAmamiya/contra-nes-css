@@ -1,0 +1,5 @@
+'use strict';
+const{test}=require('node:test'),assert=require('node:assert/strict'),native=require('../native-pixels.js'),data=require('../assets/native-tiles.json');
+test('NES原始图块库保留3404图案与7836种配色组合',()=>{assert.equal(data.patterns.length,3404);assert.equal(data.pairs.length,7836);assert.equal(new Set(data.patterns).size,3404);assert.equal(data.rgb.length,64);for(const hex of data.patterns)assert.match(hex,/^[A-F0-9]{32}$/);for(const p of data.pairs){assert.ok(p.pattern>=0&&p.pattern<data.patterns.length);const bytes=p.palette.match(/../g).map(s=>parseInt(s,16));assert.equal(bytes.length,4);for(let i=0;i<4;i++)assert.ok(bytes[i]<64||(i===0&&bytes[i]===255));}});
+test('2bpp按照MSB在左解码，低位平面1和高位平面2正确组合',()=>{const b=Buffer.alloc(16);b[0]=0xa0;b[8]=0x60;assert.deepEqual(native.indices(b.toString('hex')).slice(0,4),[1,2,3,0]);assert.equal(native.indices(b.toString('hex')).slice(8).every(x=>x===0),true);});
+test('精灵色号FF透明，背景色号0F保持不透明',()=>{const hex='00'.repeat(16);assert.equal(native.colors(hex,'FF010203',data.rgb)[0],'#00000000');assert.equal(native.colors(hex,'0F010203',data.rgb)[0],data.rgb[15]+'ff');});
