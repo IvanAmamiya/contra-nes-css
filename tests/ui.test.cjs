@@ -15,6 +15,7 @@ function boot(expanded=false,storage=new Map()){
   const window={ContraCore:{...Core,GameWorld:class extends Core.GameWorld{constructor(){super();world=this;}}},ContraRenderer:class{event(){}clear(){}draw(){}},addEventListener:(name,fn)=>winEvents[name]=fn};
   window.localStorage={getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v)};
   if(expanded){const S=require('../spirits-core.js');window.ContraSpirits={...S,SpiritsWorld:class extends S.SpiritsWorld{constructor(...args){super(...args);world=this;}}};}
+  if(expanded){const R=require('../rom-city-core.js');window.ContraRomCity={...R,RomCityWorld:class extends R.RomCityWorld{constructor(...args){super(...args);world=this;}}};}
   const sandbox={window,document,requestAnimationFrame:fn=>frame=fn,console,Set,Map,Math};
   vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../app.js'),'utf8'),sandbox);
   const key=(code,type='keydown',extra={})=>docEvents[type]({code,repeat:false,target:get('game'),preventDefault(){},...extra});
@@ -39,4 +40,3 @@ test('标题画面Konami代码仍可开启30命，菜单也可选择3命',()=>{c
 test('扩展选关、快速换枪/炸弹、触屏取消、下一关与设置持久化',()=>{const storage=new Map(),a=boot(true,storage);a.start();assert.equal(a.world.level.id,'city');assert.equal(a.world.lives,30);a.key('KeyQ');a.key('KeyQ','keyup');a.advance();assert.equal(a.world.player.activeSlot,1);a.key('KeyE');a.key('KeyE','keyup');a.advance();assert.equal(a.world.player.bombs,0);a.get('spin').dispatch('pointerdown',{pointerId:3});a.advance(10);a.get('spin').dispatch('pointercancel',{pointerId:3});a.advance();assert.equal(a.world.player.spinning,false);a.key('KeyP');a.get('stage-select').value='factory';a.get('stage-select').dispatch('change');a.start();assert.equal(a.world.level.id,'factory');assert.equal(a.world.time,1/60);a.world.state='won';a.advance();assert.equal(a.get('next-button').hidden,false);a.get('next-button').dispatch('click');assert.equal(a.world.level.id,'hive');const b=boot(true,storage);b.start();assert.equal(b.world.level.id,'hive');});
 test('损坏设置可恢复；普通按钮Enter不触发全局开始；失焦清除扩展按键',()=>{const a=boot(true,new Map([['contra-settings-v2','{bad']]));a.start();a.key('KeyU');a.advance();assert.equal(a.world.player.spinning,true);a.winEvents.blur();assert.equal(a.world.state,'paused');a.key('KeyP');a.advance();assert.equal(a.world.player.spinning,false);a.key('Enter','keydown',{target:a.get('sound-button')});assert.equal(a.world.state,'playing');});
 test('浏览器快捷键不被游戏当成输入',()=>{const a=boot();a.start();a.key('KeyD','keydown',{ctrlKey:true});a.advance(10);assert.equal(a.world.player.x,32);});
-

@@ -9,12 +9,12 @@
   <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="css-renderer.css"><link rel="stylesheet" href="assets/rom-items.css">
   <link rel="stylesheet" href="assets/stage1.css"><link rel="stylesheet" href="assets/nes-sprites.css"><link rel="stylesheet" href="assets/nes-patches-fast.css"><script defer src="assets/manifest.js"></script><script defer src="assets/backgrounds.js"></script>
   <link rel="stylesheet" href="assets/spirits-art.css"><script defer src="assets/spirits-art.js"></script><script defer src="assets/spirits-audio.js"></script>
-  <script defer src="assets/stage1.js"></script><script defer src="core.js"></script><script defer src="spirits-core.js"></script><script defer src="audio.js"></script><script defer src="css-renderer.js"></script><script defer src="app.js"></script>
-</head>
+  <script defer src="assets/stage1.js"></script><script defer src="core.js"></script><script defer src="spirits-core.js"></script><script defer src="assets/spirits-city.js"></script><script defer src="rom-city-core.js"></script><script defer src="assets/spirits-actors.js"></script><script defer src="audio.js"></script><script defer src="css-renderer.js"></script><script defer src="app.js"></script>
+<link rel="stylesheet" href="assets/spirits-city.css"><link rel="stylesheet" href="assets/spirits-actors.css"></head>
 <body>
   <main class="game-page">
     <header><h1>魂斗罗</h1><span>SPIRITS / FC EDITION</span><div><button id="sound-button" aria-pressed="false">声音：关</button><button id="pause-button" disabled>暂停</button></div></header>
-    <div class="stage-settings"><label>自由选关 <select id="stage-select" aria-label="自由选关"><option value="city">精神 · 城市废墟</option><option value="factory">精神 · 钢铁工厂</option><option value="hive">精神 · 异形巢穴</option><option value="nes">魂斗罗 1 · 丛林</option></select></label><label>生命 <select id="lives-select" aria-label="初始生命"><option value="30">30 命练习</option><option value="3">3 命挑战</option></select></label><span id="best">最高 0</span></div>
+    <div class="stage-settings"><label>自由选关 <select id="stage-select" aria-label="自由选关"><option value="city">精神 · 城市重建（28 屏）</option><option value="factory">精神 · 工厂（改编版）</option><option value="hive">精神 · 巢穴（改编版）</option><option value="nes">魂斗罗 1 · 丛林</option></select></label><label>生命 <select id="lives-select" aria-label="初始生命"><option value="30">30 命练习</option><option value="3">3 命挑战</option></select></label><span id="best">最高 0</span></div>
     <section class="screen" id="screen" aria-label="魂斗罗游戏画面">
       <div id="game" role="img" tabindex="0" aria-label="魂斗罗游戏。WASD 或方向键移动与瞄准，J 射击，K 或空格跳跃，H 连发，Enter 暂停。"></div>
       <div class="menu" id="menu">
@@ -27,7 +27,7 @@
       <p class="sr-only" id="live-status" aria-live="polite">待机</p>
     </section>
     <div class="readout" aria-label="游戏状态"><span id="state-label">待机</span><span id="lives">生命 3</span><span id="weapon">武器 N</span><span id="score">得分 000000</span></div>
-    <div id="arsenal" class="arsenal">槽 1 · M / H　炸弹 1</div>
+    <div id="arsenal" class="arsenal">槽 1 · M / M　炸弹 1</div>
     <div class="touch-controls" aria-label="触屏操作">
       <div class="dpad"><button data-control="up" aria-label="向上瞄准">↑</button><button data-control="left" aria-label="向左移动">←</button><button data-control="down" aria-label="趴下或向下瞄准">↓</button><button data-control="right" aria-label="向右移动">→</button></div>
       <div class="touch-actions"><button data-control="turbo" aria-label="连发射击">连发</button><button data-control="fire" aria-label="射击">B<br><small>射击</small></button><button data-control="jump" aria-label="跳跃">A<br><small>跳跃</small></button></div>
@@ -36,7 +36,7 @@
     <div class="instructions"><p><kbd>W A S D</kbd> / <kbd>方向键</kbd> 移动、八方向瞄准　 <kbd>J</kbd> 射击　 <kbd>K</kbd> / <kbd>空格</kbd> 跳跃　 <kbd>H</kbd> 连发</p><p><kbd>↓</kbd> 趴下 / 潜水　 <kbd>↓ + 跳跃</kbd> 下穿平台　 <kbd>Enter</kbd> / <kbd>P</kbd> 暂停　 <kbd>M</kbd> 声音</p></div>
     <div class="instructions expansion-help"><p><kbd>Q</kbd> 切换双武器　 <kbd>E</kbd> 炸弹　 <kbd>Shift + 方向</kbd> 定点瞄准　 <kbd>U</kbd> 双枪旋转</p><p>按住 ↑ 接近金色网格可攀附；方向键移动，跳跃离开，↓ + 跳跃松手。暂停后可以自由选关。</p></div>
     <details><summary>魂斗罗 1 · 丛林模式说明</summary><div class="details-content"><p>参照 FC / NES《魂斗罗》一代首关。可选 3 命或 30 命，一击死亡；死亡后失去强化武器，并在当前画面复活。镜头只向右推进。摧毁关底碉堡下方的红色核心即可通关。</p><p>J 为普通射击；M 机枪、L 激光支持按住 J 连射。H 模拟连发手柄。打掉飞行胶囊或固定补给箱，拾取 M 机枪、S 散弹、L 激光、F 火球；N 表示初始普通枪，R 提高弹速。达到 20,000 分奖励生命，之后每 30,000 分再奖励一次。</p><p>丛林模式保留单人第一关 MVP。精灵来自参考仓库，场景使用 NES Maps 原版像素图块，全部由 CSS 绘制，音效由程序合成。已接入原版十三屏布局、地面数据和固定对象配置；敌人状态机与部分武器细节仍有简化；此模式未包含双人、后七关及原版音乐。</p><p>暂停后可按 R 重开。标题画面可输入 ↑ ↑ ↓ ↓ ← → ← → B A，开启 30 命练习。<a href="ATTRIBUTION.md">素材来源</a></p></div></details>
-    <details open><summary>精神 FC 版</summary><div class="details-content"><p>三段改编关卡：城市废墟 / Beast Kimkoh、钢铁工厂 / 双机兵、异形巢穴 / 装甲异形脑。场景按 16×16 区块限制为四套 FC 配色，削减纹理，以 CSS 像素重绘；平台与 Boss 行为为本版重新编排。</p><p>B 提供约 8.53 秒护盾，剩余时间显示在武器栏；E 消耗炸弹，两者为独立道具。护盾无法防止落坑。</p><p>双武器槽；拾取替换当前槽，死亡仅丢失当前武器。M 机枪、S 五方向散弹、H 追踪、C 爆破、L 穿透激光、F 短程火焰。炸弹清除敌弹并伤害当前画面敌人，死亡后恢复一枚。默认 30 命，自由选关，设置和最高分保存在本机。</p><p>音频使用《魂斗罗 3》的四种短采样，经低精度转换后搭配 FC 风格原创编曲；没有完整搬入原版配乐。关卡为横版选段，未包含俯视关卡、双人和载具。<a href="SPIRITS.md">参考对比与版本说明</a> · <a href="spirits-qa.html">扩展测试</a></p></div></details>
+    <details open><summary>精神 FC 版</summary><div class="details-content"><p>城市首关已改用 ROM 的 28 屏地图、原生人物动作和实测移动规则；两道墙体需要击破，B 与武器来自飞行胶囊。工厂和巢穴仍是早期改编版。场景保持 FC 配色和纯 CSS 绘制。</p><p>B 提供约 8.53 秒护盾，剩余时间显示在武器栏；E 消耗炸弹，两者为独立道具。护盾无法防止落坑。</p><p>双武器槽；拾取替换当前槽，死亡仅丢失当前武器。M 机枪、S 五方向散弹、H 追踪、C 爆破、L 穿透激光、F 短程火焰。炸弹清除敌弹并伤害当前画面敌人，死亡后恢复一枚。默认 30 命，自由选关，设置和最高分保存在本机。</p><p>重建仍在进行：坦克驾驶、轰炸与火场机关、完整 Boss 动画尚未完成。音频仍为四种原版短采样与 FC 风格原创编曲，未包含完整原版音乐、双人和俯视关卡。<a href="ROM_CITY.md">首关重建进度与对照证据</a>。<a href="SPIRITS.md">参考对比与版本说明</a> · <a href="spirits-qa.html">扩展测试</a></p></div></details>
     <footer><span>256 × 224 · CSS 像素 · JavaScript</span><a href="art.html">原版素材浏览</a><a href="rom-art.html">ROM 提取对照</a><a href="README.md">说明与测试记录</a></footer>
   </main>
 </body>

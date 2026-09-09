@@ -3,11 +3,12 @@
   const { GameWorld, FixedClock } = window.ContraCore;
   const $ = id => document.getElementById(id), viewport = $('game');
   const expansion=window.ContraSpirits;
+  const makeWorld=id=>id==='city'&&window.ContraRomCity?new window.ContraRomCity.RomCityWorld():expansion&&id!=='nes'?new expansion.SpiritsWorld(id):new GameWorld();
   let saved={};try{saved=JSON.parse(window.localStorage?.getItem('contra-settings-v2')||'{}')||{};}catch(_){}
   const stageIds=['nes',...(expansion?expansion.STAGES.map(s=>s.id):[])];
   $('stage-select').value=stageIds.includes(saved.stage)?saved.stage:expansion?'city':'nes';
   $('lives-select').value=saved.lives===3?'3':'30';
-  let world = expansion&&$('stage-select').value!=='nes'?new expansion.SpiritsWorld($('stage-select').value):new GameWorld();
+  let world = makeWorld($('stage-select').value);
   const clock = new FixedClock(), renderer = new window.ContraRenderer(viewport);
   class Input {
     constructor() { this.keys = new Set(); this.pointers = new Map(); this.pulses = new Set(); }
@@ -45,7 +46,7 @@
   function text(id, value) { if ($(id).textContent !== value) $(id).textContent = value; }
   function persist(){try{window.localStorage?.setItem('contra-settings-v2',JSON.stringify({stage:$('stage-select').value,lives:Number($('lives-select').value),sound:sound.enabled}));}catch(_){}}
   function highScore(){let n=0;try{n=Number(window.localStorage?.getItem('contra-best-'+$('stage-select').value+'-'+$('lives-select').value))||0;}catch(_){}return Math.max(0,n);}
-  function newGame() { const id=$('stage-select').value;world=expansion&&id!=='nes'?new expansion.SpiritsWorld(id):new GameWorld();world.reset('playing',practice?30:Number($('lives-select').value)||30);sound.stop?.();renderer.clear(); clock.reset(); input.clear(); lastTime = null;previousState='';persist(); sound.unlock(); sync(); viewport.focus({ preventScroll: true }); }
+  function newGame() { const id=$('stage-select').value;world=makeWorld(id);world.reset('playing',practice?30:Number($('lives-select').value)||30);sound.stop?.();renderer.clear(); clock.reset(); input.clear(); lastTime = null;previousState='';persist(); sound.unlock(); sync(); viewport.focus({ preventScroll: true }); }
   function pause() { world.togglePause(); input.clear(); clock.reset();if(world.state!=='playing')sound.stop?.();sync(); if (world.state === 'playing') viewport.focus({ preventScroll: true }); }
   function action() { if (world.state === 'paused') pause(); else if (world.state !== 'playing') newGame(); }
   function toggleSound() { sound.enabled = !sound.enabled;if(!sound.enabled)sound.stop?.();sound.unlock();persist();text('sound-button', `声音：${sound.enabled ? '开' : '关'}`); $('sound-button').setAttribute('aria-pressed', String(sound.enabled)); if (sound.enabled) sound.tone(440, 660, .07, 'triangle'); }
@@ -81,7 +82,7 @@
   });
   document.addEventListener('keyup', e => input.keys.delete(e.code));
   $('start-button').addEventListener('click', action); $('pause-button').addEventListener('click', pause); $('sound-button').addEventListener('click', toggleSound);
-  function selectStage(){persist();input.clear();sound.stop?.();const id=$('stage-select').value;world=expansion&&id!=='nes'?new expansion.SpiritsWorld(id):new GameWorld();world.reset('title',Number($('lives-select').value)||30);practice=false;previousState='';renderer.clear();clock.reset();sync();}
+  function selectStage(){persist();input.clear();sound.stop?.();const id=$('stage-select').value;world=makeWorld(id);world.reset('title',Number($('lives-select').value)||30);practice=false;previousState='';renderer.clear();clock.reset();sync();}
   $('stage-select').addEventListener('change',selectStage);$('lives-select').addEventListener('change',selectStage);
   $('next-button').addEventListener('click',()=>{const n=expansion.STAGES.findIndex(s=>s.id===world.level.id);if(n>=0&&n<2){$('stage-select').value=expansion.STAGES[n+1].id;newGame();}});
   viewport.addEventListener('pointerdown', () => { viewport.focus({ preventScroll: true }); sound.unlock(); });

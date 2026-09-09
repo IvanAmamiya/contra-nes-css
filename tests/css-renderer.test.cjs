@@ -3,7 +3,7 @@ const{test}=require('node:test'),assert=require('node:assert/strict'),fs=require
 function boot(expanded=false){
   let observer;class Element{constructor(){this.children=[];this.style={};this.dataset={};this.hidden=false;this.className='';this.classList={add:c=>this.className+=' '+c,toggle:(c,on)=>{const s=new Set(this.className.split(' '));on?s.add(c):s.delete(c);this.className=[...s].join(' ');}};}appendChild(e){this.children.push(e);e.parent=this;}replaceChildren(...es){this.children=es;for(const e of es)e.parent=this;}setAttribute(){}getBoundingClientRect(){return{width:768,height:672};}remove(){this.parent.children=this.parent.children.filter(x=>x!==this);}}
   const window={ContraCore:Core,ContraAssets:require('../assets/manifest.json'),ContraBackgrounds:require('../assets/backgrounds.json')},document={createElement:()=>new Element()};
-  if(expanded){window.SpiritsArt=require('../assets/spirits-art.json');window.ContraSpirits=require('../spirits-core.js');}
+  if(expanded){window.SpiritsArt=require('../assets/spirits-art.json');window.SpiritsActors=require('../assets/spirits-actors.json');window.ContraSpirits=require('../spirits-core.js');}
   const ResizeObserver=class{constructor(fn){observer=this;this.fn=fn;}observe(){}disconnect(){this.disconnected=true;}};
   vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../css-renderer.js'),'utf8'),{window,document,ResizeObserver,Promise,Math});
   const viewport=new Element(),renderer=new window.ContraRenderer(viewport),world=new Core.GameWorld();
@@ -28,6 +28,13 @@ test('真实S枪生成的五颗弹在第16、32帧切换原版三段大小',()=>
     assert.equal(r.pool.filter(e=>!e.hidden&&e.className===`nes-art art-sprite_${id}`).length,5,`frame ${frame}`);
     assert.equal(r.pool.filter(e=>!e.hidden&&e.className==='nes-art art-sprite_1e').length,0,'S must not fall back to normal bullets');
   }
+});
+
+test('重建首关渲染原版人物与双层地图，护盾覆盖48像素人物，墙体破坏刷新图块',()=>{
+ const{renderer:r,count}=boot(true),R=require('../rom-city-core.js'),w=new R.RomCityWorld();w.reset();w.player.invincible=0;r.draw(w,0);
+ assert.ok(r.pool.some(e=>!e.hidden&&e.className==='nes-art art-c3_player_idle_0'));assert.equal(r.background.children.length,56);assert.equal(r.land.children.filter(e=>e.className.includes('spirits-platform')).length,0);
+ w.player.grantBarrier();r.draw(w,0);assert.equal(r.barrierLayer.style.height,'52px');assert.equal(r.barrierLayer.hidden,false);
+ w.camera=2176;r.draw(w,0);const before=r.chunks.map(e=>e.className);w.level.removedWalls.push(2208);w.level.artRevision++;r.draw(w,0);assert.notDeepEqual(r.chunks.map(e=>e.className),before);assert.ok(count(r.stage)<220);
 });
 
 test('M弹、普通敌弹和碉堡炮弹使用各自素材，不混成大散弹',()=>{

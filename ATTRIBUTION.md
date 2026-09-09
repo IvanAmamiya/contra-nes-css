@@ -30,3 +30,8 @@ v2.0.1：构建时提取参考 SNESTilesKitten（Sylvain "Skarsnik" Colinet）�
 
 
 首关逻辑源表来自同一提交的 `src/bank2.asm`（13 屏压缩索引、30 个固定对象记录）与 `src/bank3.asm`（super-tile 组成）。数据快照在 `assets/stage1-source.json`，生成结果在 `assets/stage1.json`，记录提交与 SHA-256。水域、地面采用原版 16 像素间隔的碰撞采样；固定对象按卷轴位置触发，飞行胶囊额外应用 `bank0.asm` 的左侧入场位置。
+
+
+## v2.1.0 城市重建
+
+首关追加元图块位于 ROM 偏移 0x54DBC。背景、人物及弹体经 SNESTilesKitten 兼容解码与 Snes9x VRAM/OAM 拼装，再转换成 CSS。逐帧参考和各项限制见 [ROM_CITY.md](ROM_CITY.md)。关底美术继续使用已归属的 SNES Maps 图，现保留原生 160×168 尺寸；未冒充本轮 ROM 动态提取。

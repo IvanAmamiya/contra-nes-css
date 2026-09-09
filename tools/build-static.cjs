@@ -11,6 +11,7 @@ const files = fs.readdirSync(root).filter(name => /\.(html|css|js|md|png)$/.test
 files.push('browser-test-results.json', 'css-render-performance.json', 'css-full-map-performance.json', 'test-results.txt');
 files.push('spirits-browser-results.json','spirits-performance.json','spirits-audio-results.json','spirits-mobile-results.json','spirits-test-results.txt');
 files.push('rom-patch-browser-results.json','rom-patch-performance.json','rom-patch-test-results.txt');
+files.push('city-browser-results.json','city-performance.json','city-test-results.txt');
 for (const name of fs.readdirSync(path.join(root, 'assets'))) {
   if (/\.(js|css|json|pal)$/.test(name)) files.push('assets/' + name);
 }
