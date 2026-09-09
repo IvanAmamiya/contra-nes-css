@@ -2,6 +2,8 @@
 
 参照 FC / NES《魂斗罗》一代：丛林、岩壁、河水、爆炸桥、胶囊武器和关底碉堡。原生 JavaScript 控制游戏逻辑，**游戏画面完全由 DOM + CSS 绘制**，无 Canvas、SVG、WebGL 或位图显示。直接运行无需构建。
 
+[在线游玩](https://contra-nes-css.vercel.app) · [原版素材浏览](https://contra-nes-css.vercel.app/art.html) · [GitHub Releases](https://github.com/IvanAmamiya/contra-nes-css/releases)
+
 ## 启动
 
 直接双击本目录的 **index.html** 即可离线游戏；请保留旁边的 JS、CSS 与 assets 文件夹。
@@ -58,7 +60,9 @@ NES 首关稳定版本为 `v1.2.2`，保留在 `main` 分支。`feature/sfc-cont
 
 已经提供 `vercel.json`：使用纯静态构建，跳过依赖安装，发布 `dist/`。不需要把本地 `server.cjs` 部署为服务端函数。Vercel 的安装与输出配置见 [官方说明](https://vercel.com/docs/project-configuration/vercel-json)。
 
-首次部署在本目录执行 `npx vercel login`，登录后执行 `npx vercel --prod`；已关联项目后可执行 `npx vercel --prod --yes`。`.vercel/` 中的本地项目关联不进入 Git，`.vercelignore` 排除 Git、其他托管平台配置及构建用原图；保留回归页需要的两个浏览器脚本。
+本仓库已经与 Vercel 项目 `contra-nes-css` 连接，`main` 为正式部署分支。后续更新先运行 `npm test` 和 `npm run build`，再推送到 `main`，由 Vercel 自动构建并更新在线站点。`feature/sfc-contra` 用于后续 SFC 开发，合并到 `main` 后才会更新正式站点。
+
+手动部署可执行 `npx vercel login`，登录后执行 `npx vercel --prod`；已关联项目后可执行 `npx vercel --prod --yes`。`.vercel/` 中的本地项目关联不进入 Git，`.vercelignore` 排除 Git、其他托管平台配置及构建用原图；保留回归页需要的两个浏览器脚本。
 
 ## 测试与代码
 
