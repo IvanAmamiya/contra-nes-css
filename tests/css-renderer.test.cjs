@@ -16,6 +16,8 @@ test('断桥显示空洞，已击毁炮台和碉堡部件停止显示',()=>{cons
 test('渲染器销毁时释放观察器与场景',()=>{const{renderer:r,viewport,observer}=boot();r.destroy();assert.equal(viewport.children.length,0);assert.equal(observer.disconnected,true);});
 test('三关新Boss、平台、攀附姿势与标题切换；重复重建保持节点有界',()=>{const{renderer:r,count}=boot(true),S=require('../spirits-core.js');for(let i=0;i<60;i++){const w=new S.SpiritsWorld(S.STAGES[i%3].id);w.reset();w.camera=1024;w.boss.activated=true;w.player.invincible=0;w.player.clinging={type:'ceiling'};r.draw(w,0);assert.ok(r.pool.some(e=>!e.hidden&&e.className==='nes-art art-sprite_16'));assert.ok(r.pool.some(e=>!e.hidden&&e.className.includes('art-spirits_')));assert.ok(r.chunks.some(c=>c.className.includes('spirits-chunk-'+w.level.id)));assert.equal(r.bossMeter.hidden,false);assert.ok(count(r.stage)<180);w.state='title';r.draw(w,0);assert.equal(r.bossMeter.hidden,true);assert.equal(r.bombLayer.hidden,true);}});
 
+test('B保护视觉持续可见；炸弹用独立ROM图标；消失道具不残留',()=>{const{renderer:r}=boot(true),S=require('../spirits-core.js'),w=new S.SpiritsWorld();w.reset();w.player.grantBarrier();r.time=1/16;r.draw(w,0);assert.equal(r.barrierLayer.hidden,false);assert.ok(r.pool.some(e=>!e.hidden&&/art-sprite_0f$/.test(e.className)));assert.ok(r.pool.some(e=>!e.hidden&&e.className==='nes-art art-spirits_bomb'));const p=w.pickups.find(p=>p.code==='bomb');p.alive=false;r.draw(w,0);assert.equal(r.pool.filter(e=>!e.hidden&&e.className==='nes-art art-spirits_bomb').length,0);w.player.barrier=0;r.draw(w,0);assert.equal(r.barrierLayer.hidden,true);});
+
 test('真实S枪生成的五颗弹在第16、32帧切换原版三段大小',()=>{
   const{renderer:r,world:w}=boot();w.reset('playing');w.enemies=[];w.capsules=[];
   w.bullets=new Core.SpreadWeapon().tryFire({time:0,x:80,y:100,angle:0});

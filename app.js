@@ -51,7 +51,7 @@
   function toggleSound() { sound.enabled = !sound.enabled;if(!sound.enabled)sound.stop?.();sound.unlock();persist();text('sound-button', `声音：${sound.enabled ? '开' : '关'}`); $('sound-button').setAttribute('aria-pressed', String(sound.enabled)); if (sound.enabled) sound.tone(440, 660, .07, 'triangle'); }
   function sync() {
     text('lives', `生命 ${world.lives}`); text('weapon', `武器 ${world.player.weapon.code}${world.player.rapid ? '+R' : ''}`); text('score', `得分 ${String(world.score).padStart(6,'0')}`);
-    text('arsenal',world.player.slots?`槽 ${world.player.activeSlot+1} · ${world.player.slots.map(w=>w.code).join(' / ')}　炸弹 ${world.player.bombs}${world.player.clinging?'　攀附中':''}`:'NES 原版规则');
+    text('arsenal',world.player.slots?`槽 ${world.player.activeSlot+1} · ${world.player.slots.map(w=>w.code).join(' / ')}　炸弹 ${world.player.bombs}${world.player.barrier>0?'　B 护盾 '+world.player.barrier.toFixed(1)+'秒':''}${world.player.clinging?'　攀附中':''}`:'NES 原版规则');
     $('stage-select').disabled=world.state==='playing';$('lives-select').disabled=world.state==='playing';
     $('next-button').hidden=world.state!=='won'||!world.level.id||world.level.id==='hive';
     if (world.state === previousState) return;
@@ -103,4 +103,3 @@
   }
   text('sound-button',`声音：${sound.enabled?'开':'关'}`);$('sound-button').setAttribute('aria-pressed',String(sound.enabled));sync(); requestAnimationFrame(frame);
 })();
-

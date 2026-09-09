@@ -1,5 +1,7 @@
 # 参考与素材来源
 
+v2.0.1：构建时提取参考 SNESTilesKitten（Sylvain "Skarsnik" Colinet）与 Proton 的 Konami SNES 解压研究。`tools/snes/` 中的工具附 GPL-3.0-or-later 许可，游戏运行时不加载它们。炸弹图标和 ROM 对照页来自本机已有的修改版 ROM，素材版权仍属 Konami。确切输入哈希、源码提交和验证边界见 [ROM_ANALYSIS.md](ROM_ANALYSIS.md)。
+
 本项目为使用原生 JavaScript 重新实现的《魂斗罗》一代首关练习及《魂斗罗精神》FC 风格扩展，不是 Konami 官方产品。
 
 参考项目：[vermiceli/nes-contra-us](https://github.com/vermiceli/nes-contra-us/tree/687d651c021fd7020f10d05b970ccb62663c94bd)。本次核对版本：`687d651c021fd7020f10d05b970ccb62663c94bd`。

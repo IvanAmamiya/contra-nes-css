@@ -1,4 +1,6 @@
-# 魂斗罗 · 精神 FC 版 v2.0.0
+# 魂斗罗 · 精神 FC 版 v2.0.1
+
+更新：实际 ROM 解包与护盾修复，见 [ROM 分析记录](ROM_ANALYSIS.md)、[纯 CSS 素材对照](rom-art.html) 和 [本次测试结果](ROM_PATCH_TEST_REPORT.md)。其他关卡规则的改编范围仍以下文为准。
 
 参照 FC / NES《魂斗罗》一代：丛林、岩壁、河水、爆炸桥、胶囊武器和关底碉堡。原生 JavaScript 控制游戏逻辑，**游戏画面完全由 DOM + CSS 绘制**，无 Canvas、SVG、WebGL 或位图显示。直接运行无需构建。
 
@@ -104,4 +106,3 @@ npm test
 ## 重新生成 CSS 素材
 
 游戏运行与测试都不需要安装依赖。只有重新生成素材时需要 Node.js 和构建依赖 Sharp：先执行 `npm install`，再执行 `npm run build:assets`。生成器读取包内原始 PNG/GIF 和 stage1-source.json 源表，输出 CSS、关卡数据和像素校验清单。`node tools/build-stage1.cjs 路径/nes-contra-us/src` 可从固定版本源码刷新首关表；普通构建不需要 ROM 或外部仓库。`tools/extract-native-tiles.cjs` 用于从指定的 `hires.txt`、`FCEUX.pal` 重新提取原始 CHR 匹配数据；已提取的数据随包提供。
-

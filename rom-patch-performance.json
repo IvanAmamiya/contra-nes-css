@@ -1,0 +1,24 @@
+{
+  "frames": 600,
+  "fps": 56.6,
+  "renderP95Ms": 0.5,
+  "intervalP95Ms": 18.199999999982538,
+  "maxNodes": 138,
+  "results": [
+    {
+      "stage": "city",
+      "state": "won"
+    },
+    {
+      "stage": "factory",
+      "state": "won"
+    },
+    {
+      "stage": "hive",
+      "state": "won"
+    }
+  ],
+  "canvas": 0,
+  "images": 0,
+  "rasterRequests": 0
+}

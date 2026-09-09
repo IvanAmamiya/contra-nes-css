@@ -3,6 +3,8 @@
 'use strict';
 const {clamp,overlap,Character,Bullet,Player,Enemy,Pickup,Level,GameWorld,CollisionSystem}=C;
 const STAGES=[{id:'city',name:'城市废墟',boss:'BEAST KIMKOH',number:1},{id:'factory',name:'钢铁工厂',boss:'BOB · 双机兵',number:3},{id:'hive',name:'异形巢穴',boss:'ALIEN BRAIN',number:6}];
+// Measured on the identified local SA-1 ROM. See ROM_ANALYSIS.md and its trace fixture.
+const PROTECTION=Object.freeze({barrierFrames:512,respawnFrames:96});
 const WEAPONS={M:{interval:.12,speed:240,kind:'machine',damage:1},S:{interval:.23,speed:220,kind:'spread',damage:1},H:{interval:.18,speed:160,kind:'homing',damage:1},C:{interval:.3,speed:170,kind:'crush',damage:3},L:{interval:.14,speed:360,kind:'laser',damage:2},F:{interval:.07,speed:150,kind:'flame',damage:1}};
 class SpiritsBullet extends Bullet {
  constructor(x,y,angle,code){const d=WEAPONS[code];super(x,y,angle,'player',d.speed,d.kind,d.damage);this.code=code;this.life=code==='F'?.48:1.7;this.pierced=new Set();}
@@ -13,7 +15,8 @@ class SpiritsWeapon {
  tryFire(ctx){if(!(ctx.held||ctx.turbo)||ctx.time+1e-9<this.nextFireTime||ctx.activeCount>=40)return[];const d=WEAPONS[this.code];this.nextFireTime=ctx.time+d.interval;return(this.code==='S'?[-.32,-.16,0,.16,.32]:[0]).slice(0,40-ctx.activeCount).map(a=>new SpiritsBullet(ctx.x,ctx.y,ctx.angle+a,this.code));}
 }
 class SpiritsPlayer extends Player {
- constructor(x=32,y=154){super(x,y);this.slots=[new SpiritsWeapon('M'),new SpiritsWeapon('H')];this.activeSlot=0;this.weapon=this.slots[0];this.bombs=1;this.wasSwap=false;this.wasBomb=false;this.clinging=null;this.gripCooldown=0;this.spinning=false;}
+ constructor(x=32,y=154){super(x,y);this.invincible=PROTECTION.respawnFrames/60;this.slots=[new SpiritsWeapon('M'),new SpiritsWeapon('H')];this.activeSlot=0;this.weapon=this.slots[0];this.bombs=1;this.wasSwap=false;this.wasBomb=false;this.clinging=null;this.gripCooldown=0;this.spinning=false;}
+ grantBarrier(){this.barrier=PROTECTION.barrierFrames/60;this.invincible=Math.max(this.invincible,this.barrier);}
  equip(weapon){this.slots[this.activeSlot]=weapon instanceof SpiritsWeapon?weapon:new SpiritsWeapon(weapon.code);this.weapon=this.slots[this.activeSlot];}
  update(dt,input,world){
   if(this.respawnTimer>0){super.update(dt,input,world);this.wasSwap=!!input.swap;this.wasBomb=!!input.bomb;return;}
@@ -28,6 +31,7 @@ class SpiritsPlayer extends Player {
   const oldX=this.x;this.spinning=!!input.spin;
   // Base player retains its proven movement; firing is handled once below with locked aim or spin.
   try{super.update(dt,{...input,fire:false,turbo:false,jump:release?false:input.jump,down:grip?false:input.down},world);}finally{world.collision.move=oldMove;}
+  if(this.barrier<1e-9)this.barrier=0;if(this.invincible<1e-9)this.invincible=0;
   if(this.respawnTimer>0||!this.alive)return;
   if(input.lock||this.spinning){this.x=oldX;this.vx=0;}
   if(grip&&vertical>0)this.aim=axis?Math.atan2(1,axis):Math.PI/2;
@@ -40,7 +44,7 @@ class SpiritsPlayer extends Player {
 }
 class SpiritsPickup extends Pickup {
  update(dt,world){if(this.x>world.camera+256)return;super.update(dt,world);}
- apply(world){if(!this.alive)return;this.alive=false;const p=world.player;if(this.code==='B'){p.barrier=12;p.invincible=12;}else if(this.code==='bomb')p.bombs=Math.min(5,p.bombs+1);else p.equip(new SpiritsWeapon(this.code));world.addScore(100);world.emit('pickup',{x:this.cx,y:this.cy,code:this.code});}
+ apply(world){if(!this.alive)return;this.alive=false;const p=world.player;if(this.code==='B')p.grantBarrier();else if(this.code==='bomb')p.bombs=Math.min(5,p.bombs+1);else p.equip(new SpiritsWeapon(this.code));world.addScore(100);world.emit('pickup',{x:this.cx,y:this.cy,code:this.code});}
 }
 class SpiritsBoss extends Character {
  constructor(x,y,kind){const spec={kimkoh:[80,84,100],bob1:[44,62,55],bob2:[44,62,55],armored:[112,62,130]}[kind];super(x,y,...spec,'enemy');this.kind=kind;this.originX=x;this.originY=y;this.isBoss=true;this.age=0;this.phase=1;this.nextShot=1.4;this.telegraph=false;}
@@ -75,11 +79,12 @@ class SpiritsCollision extends CollisionSystem {
 }
 class SpiritsWorld extends GameWorld {
  constructor(stage='city',seed=1337){super(seed);this.stageId=stage;this.reset('title',30);}
- reset(state='playing',lives=30){super.reset(state,clamp(Number(lives)||30,1,30));this.level=new SpiritsLevel(this.stageId);this.collision=new SpiritsCollision();this.player=new SpiritsPlayer();this.enemies=this.level.createEnemies();this.capsules=[];this.pickups=[['S',112],['C',272],['L',592],['F',720],['H',944],['bomb',1040]].map(([code,x])=>new SpiritsPickup(x,160,code));this.boss={x:this.level.bossX,alive:true,activated:false,parts:this.level.createBossParts()};this.bombFlash=0;}
+ reset(state='playing',lives=30){super.reset(state,clamp(Number(lives)||30,1,30));this.level=new SpiritsLevel(this.stageId);this.collision=new SpiritsCollision();this.player=new SpiritsPlayer();this.enemies=this.level.createEnemies();this.capsules=[];this.pickups=[['B',64],['S',112],['C',272],['L',592],['F',720],['B',864],['H',944],['bomb',1040]].map(([code,x])=>new SpiritsPickup(x,160,code));this.boss={x:this.level.bossX,alive:true,activated:false,parts:this.level.createBossParts()};this.bombFlash=0;}
+ respawn(){super.respawn();this.player.invincible=PROTECTION.respawnFrames/60;}
  addScore(value){this.score+=value;while(this.score>=this.nextExtraLife){this.lives=Math.min(30,this.lives+1);this.nextExtraLife+=60000;this.emit('extraLife',{});}}
  bomb(){if(this.player.bombs<=0||this.state!=='playing'||this.player.respawnTimer>0)return false;this.player.bombs--;this.bombFlash=.3;for(const b of this.bullets)if(b.team==='enemy')b.alive=false;for(const e of [...this.enemies,...this.boss.parts])if(e.alive&&e.x>=this.camera-32&&e.x<this.camera+256)e.takeDamage(e.isBoss?18:20,this);this.player.invincible=Math.max(this.player.invincible,.75);this.emit('bomb',{x:this.player.cx,y:this.player.cy,big:true});return true;}
  hurtPlayer(fall=false){const result=super.hurtPlayer(fall);if(result){this.player.bombs=1;this.player.clinging=null;this.player.gripCooldown=.3;}return result;}
  update(dt,input={}){if(!Number.isFinite(dt)||dt<=0||this.state!=='playing')return;dt=Math.min(dt,.05);super.update(dt,input);if(this.state!=='playing')return;this.bombFlash=Math.max(0,this.bombFlash-dt);if(!this.clearTimer&&this.boss.activated&&!this.player.respawnTimer)for(const b of this.boss.parts)if(b.alive&&overlap(b,this.player))this.player.takeDamage(1,this);this.bullets=this.bullets.filter(b=>b.alive).slice(0,120);}
 }
-return{STAGES,WEAPONS,SpiritsBullet,SpiritsWeapon,SpiritsPlayer,SpiritsPickup,SpiritsBoss,SpiritsLevel,SpiritsCollision,SpiritsWorld};
+return{STAGES,WEAPONS,PROTECTION,SpiritsBullet,SpiritsWeapon,SpiritsPlayer,SpiritsPickup,SpiritsBoss,SpiritsLevel,SpiritsCollision,SpiritsWorld};
 });

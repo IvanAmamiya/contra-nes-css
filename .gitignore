@@ -10,3 +10,8 @@ dist/
 
 .vercel
 .env*
+*.smc
+*.sfc
+*.nes
+*.srm
+*.state

@@ -3,6 +3,7 @@
   const { WIDTH, HEIGHT } = window.ContraCore;
   const assets = window.ContraAssets.assets, bg = window.ContraBackgrounds;
   Object.assign(assets,window.SpiritsArt?.assets||{});
+  assets.spirits_bomb={width:16,height:16};
   const px = n => `${Math.round(n)}px`;
   function element(className, parent) { const el = document.createElement('div'); el.className = className; if (parent) parent.appendChild(el); return el; }
   function move(el, x, y, suffix = '') { const value = `translate(${px(x)},${px(y)})${suffix}`; if (el.style.transform !== value) el.style.transform = value; }
@@ -40,6 +41,7 @@
       if(window.ContraSpirits)caption.textContent='CONTRA SPIRITS / FC EDITION';
       this.bossMeter=element('spirits-boss-meter',this.stage);this.bossMeter.hidden=true;
       this.bombLayer=element('spirits-bomb-flash',this.stage);this.bombLayer.hidden=true;
+      this.barrierLayer=element('spirits-barrier',this.actors);this.barrierLayer.hidden=true;
       this.pool = []; this.time=0; this.effects=[]; this.level=null; this.bridges=[];
       this.ready = Promise.resolve(true);
       this.resize = () => { const r=viewport.getBoundingClientRect(); this.stage.style.transform=`scale(${r.width/WIDTH},${r.height/HEIGHT})`; };
@@ -73,7 +75,7 @@
       el.hidden=false;el.style.filter='';move(el,x+(face<0?a.width:0),y+(flipY?a.height:0),` scale(${face},${flipY?-1:1})`);return el;
     }
     human(actor,cam,player=false) {
-      if(player&&(actor.respawnTimer>0||!actor.alive||actor.invincible>0&&Math.floor(this.time*16)%2))return;
+      if(player&&(actor.respawnTimer>0||!actor.alive||actor.invincible>0&&!(actor.slots&&actor.barrier>0)&&Math.floor(this.time*16)%2))return;
       const frame=Math.floor(this.time*60/8)%6;let id, flip=false;
       if(!player)id=actor.kind==='rifleman'?'43':['3b','3c','3d','3f','3c','3e'][frame];
       else if(actor.submerged)id='19';
@@ -111,10 +113,12 @@
       this.used=0;
       for(const capsule of world.capsules){if(!capsule.flying||capsule.spawnCamera>world.camera||capsule.x-cam>WIDTH+24||capsule.x-cam<-32)continue;const a=assets.sprite_4d;this.sprite('sprite_4d',capsule.cx-cam-a.width/2,capsule.cy-a.height/2);}
       const pickupId={S:'2f',B:'30',F:'31',L:'32',R:'33',M:'34'};
-      for(const p of world.pickups){const id=world.level.data.spirits&&assets['spirits_'+p.code]?'spirits_'+p.code:`sprite_${p.code==='bomb'?'30':pickupId[p.code]||'34'}`,a=assets[id];this.sprite(id,p.cx-cam-a.width/2,p.y+p.h-a.height);}
+      for(const p of world.pickups){if(!p.alive)continue;const id=world.level.data.spirits&&assets['spirits_'+p.code]?'spirits_'+p.code:`sprite_${pickupId[p.code]||'34'}`,a=assets[id];this.sprite(id,p.cx-cam-a.width/2,p.y+p.h-a.height);}
       for(const e of world.enemies){if(e.kind==='turret'||e.spawnCamera>world.camera||e.x-cam<-40||e.x-cam>WIDTH+24)continue;this.human(e,cam);}
       if(world.level.data.spirits)for(const b of world.boss.parts){if(!b.alive||b.x-cam>256)continue;const id=b.kind==='armored'&&b.phase===2?'spirits_brain':'spirits_'+b.kind,a=assets[id];const el=this.sprite(id,b.cx-cam-a.width/2,b.y+b.h-a.height);if(el&&(b.flash>0||b.telegraph))el.style.filter=b.flash>0?'brightness(2)':'brightness(1.35)';}
       this.human(world.player,cam,true);
+      this.barrierLayer.hidden=!(world.level.data.spirits&&world.player.barrier>0&&world.player.alive&&world.player.respawnTimer===0);
+      if(!this.barrierLayer.hidden){const p=world.player;move(this.barrierLayer,p.cx-cam-12,p.y+p.h-(p.prone?15:35));this.barrierLayer.style.height=px(p.prone?17:37);this.barrierLayer.classList.toggle('fading',p.barrier<=96/60);this.barrierLayer.classList.toggle('pulse',Math.floor(this.time*15)%2===1);}
       for(const b of world.bullets){
         if(b.delay>0)continue;let id='1e',face=1,flip=false;
         if(b.team==='enemy')id=b.kind==='cannon'?'21':'1e';else if(b.kind==='fire'||b.kind==='flame')id='22';else if(b.kind==='homing')id='20';else if(b.kind==='crush')id='21';else if(b.kind==='laser'){id=Math.abs(Math.cos(b.angle))<.05?'23':Math.abs(Math.sin(b.angle))<.05?'24':'25';face=Math.cos(b.angle)<0?-1:1;flip=Math.sin(b.angle)>0;}

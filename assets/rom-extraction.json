@@ -1,0 +1,220 @@
+{
+  "rom": {
+    "sha256": "44ebb9a450b5b77341fc9130ab45767a13212c242350aad450a4526f8a8d8017",
+    "bytes": 1048576,
+    "copierHeader": 0,
+    "title": "CONTRA3 THE ALIEN WAR",
+    "mapMode": 35,
+    "modified": true
+  },
+  "blocks": [
+    {
+      "name": "city-graphics-0",
+      "offset": "0x48000",
+      "compressed": 6542,
+      "decoded": 8192,
+      "sha256": "66804431a9b5d77d23b4714543140dbc4ebdde1687bd6c6fbbe962626136bfe4",
+      "vramOffset": 0,
+      "vramMatch": true
+    },
+    {
+      "name": "city-graphics-1",
+      "offset": "0x4998e",
+      "compressed": 6559,
+      "decoded": 8192,
+      "sha256": "572bec59f48f00b0762b1d1a65136191fc54c92991c8cac3b0985dd9532579da",
+      "vramOffset": 8192,
+      "vramMatch": true
+    },
+    {
+      "name": "city-graphics-2",
+      "offset": "0x4b32d",
+      "compressed": 6684,
+      "decoded": 8192,
+      "sha256": "c42e60be7e7496ce9a4e79ad52d0de2c941fda5fa7eb920f0ae4974b7488a20e",
+      "vramOffset": 16384,
+      "vramMatch": true
+    },
+    {
+      "name": "city-graphics-3",
+      "offset": "0x4cd49",
+      "compressed": 6383,
+      "decoded": 8192,
+      "sha256": "4374da5a3d42060d207c67f17df1ddf53bd2631b32b4c31a85bfa144becee362",
+      "vramOffset": 24576,
+      "vramMatch": true
+    },
+    {
+      "name": "city-bg1-metatiles",
+      "offset": "0x53064",
+      "compressed": 4311,
+      "decoded": 8192,
+      "sha256": "578b7f6151376397ac638e57ae63339cade668a0c6c5e6ba70149f47f266e60f",
+      "vramMatch": null
+    },
+    {
+      "name": "city-bg2-metatiles",
+      "offset": "0x5413b",
+      "compressed": 3201,
+      "decoded": 6816,
+      "sha256": "f22f258b159053495da292fe83bd0305710e746e2bfc46190b0756dbc9c0a358",
+      "vramMatch": null
+    },
+    {
+      "name": "city-bg1-layout",
+      "offset": "0x55871",
+      "compressed": 1532,
+      "decoded": 4096,
+      "sha256": "2d7795d80d468cb23a87c7dbbaebd323225eb2b21771cdf73bc6d7f4912f6fa4",
+      "vramMatch": null
+    },
+    {
+      "name": "city-bg2-layout",
+      "offset": "0x55e6d",
+      "compressed": 454,
+      "decoded": 2048,
+      "sha256": "8fe0606c5a61ee94c1ba4cdebf6fec966330619ba369fde8e075c0c888775cfa",
+      "vramMatch": null
+    },
+    {
+      "name": "shared-sprites-0",
+      "offset": "0x6bceb",
+      "compressed": 1555,
+      "decoded": 2048,
+      "sha256": "01638df85eea8d5057e2afa73b43a6db243c152509dd4f0ea9c19966b94cdfde",
+      "vramOffset": 57344,
+      "vramMatch": true
+    },
+    {
+      "name": "shared-sprites-1",
+      "offset": "0x6c2fe",
+      "compressed": 1550,
+      "decoded": 2048,
+      "sha256": "6bf72eb741b74f87b8afff438cab88d07011c5297d6340b99a379d00a97ca4ba",
+      "vramOffset": 59392,
+      "vramMatch": true
+    },
+    {
+      "name": "city-sprites",
+      "offset": "0x6c90c",
+      "compressed": 3527,
+      "decoded": 4096,
+      "sha256": "2648c4950e874ad7ea194d36173d12bcf7b8012b4f3a3e597e5e07eba42b0eb3",
+      "vramOffset": 61440,
+      "vramMatch": true
+    },
+    {
+      "name": "factory-graphics-0",
+      "offset": "0x60000",
+      "compressed": 6306,
+      "decoded": 8192,
+      "sha256": "19daf2a0cf2eb0dc111ee120d8350a6914855e5ff071ea17d2ac40e73858247b",
+      "vramMatch": null
+    },
+    {
+      "name": "factory-graphics-1",
+      "offset": "0x618a2",
+      "compressed": 5917,
+      "decoded": 8192,
+      "sha256": "4085ea7aebd16c8449aad1fe476efae469baf29fa99f263ea6e16713a5f1757f",
+      "vramMatch": null
+    },
+    {
+      "name": "factory-graphics-2",
+      "offset": "0x62fbf",
+      "compressed": 5791,
+      "decoded": 8192,
+      "sha256": "5a69823a56e20a612692e6bc0b5cf8f721fc6b9b26785c331743c764cdca1d3f",
+      "vramMatch": null
+    },
+    {
+      "name": "factory-graphics-3",
+      "offset": "0x6465e",
+      "compressed": 5327,
+      "decoded": 8192,
+      "sha256": "806a9b7c6d8b012291dccb1862cb6203bd43fc7725b8418d8faae05765177ef2",
+      "vramMatch": null
+    },
+    {
+      "name": "factory-bg2-metatiles",
+      "offset": "0x68000",
+      "compressed": 3268,
+      "decoded": 8192,
+      "sha256": "297ebec000c23cf37e9d8ec4f84a357ab9bb7b79e9c12cd20484fc1bb77f72c2",
+      "vramMatch": null
+    },
+    {
+      "name": "factory-bg1-metatiles",
+      "offset": "0x68cc4",
+      "compressed": 4058,
+      "decoded": 8192,
+      "sha256": "d4dda9518964076c07d0f80a3605af3719807a8418bcb4d00dab51edf990a6c1",
+      "vramMatch": null
+    },
+    {
+      "name": "factory-bg2-layout",
+      "offset": "0x6a5e5",
+      "compressed": 323,
+      "decoded": 2048,
+      "sha256": "ab4f84661f21d0c621d7909f206230bb01ef065da7f33fedc5bccc1074d0959e",
+      "vramMatch": null
+    },
+    {
+      "name": "factory-bg1-layout",
+      "offset": "0x775a2",
+      "compressed": 1531,
+      "decoded": 4096,
+      "sha256": "9faf1795f8e5d45ab0e555f44d35b902f93857e7c9d45708195402f44164ce24",
+      "vramMatch": null
+    },
+    {
+      "name": "hive-graphics-0",
+      "offset": "0x80000",
+      "compressed": 7191,
+      "decoded": 8192,
+      "sha256": "9d2cb03445e507a69fd4472e85d31b9b40ad4f151cfe376f573996c8b3307d2c",
+      "vramMatch": null
+    },
+    {
+      "name": "hive-graphics-1",
+      "offset": "0x81c17",
+      "compressed": 7440,
+      "decoded": 8193,
+      "sha256": "04b5621f25c959f2ab25e48901ca7d43f182bf7cdce69847c8c1be2cd9a76683",
+      "vramMatch": null
+    },
+    {
+      "name": "hive-graphics-2",
+      "offset": "0x83927",
+      "compressed": 7291,
+      "decoded": 8192,
+      "sha256": "01336a9c41776eaaaf714bb1e9858e4b596f37a7efb1c385009c3394e5aa0dfe",
+      "vramMatch": null
+    },
+    {
+      "name": "hive-graphics-3",
+      "offset": "0x855a2",
+      "compressed": 7260,
+      "decoded": 8192,
+      "sha256": "3850da1e78f432a0755bbc30ccc732a6eaa83aebbc612562ef109a33bf48f582",
+      "vramMatch": null
+    },
+    {
+      "name": "hive-bg1-layout",
+      "offset": "0x871fe",
+      "compressed": 1331,
+      "decoded": 4096,
+      "sha256": "b982db0de708b1c99d63dd628bb67c18fde267a2fcfacaa3613bdd7a98ccc63c",
+      "vramMatch": null
+    },
+    {
+      "name": "hive-bg2-layout",
+      "offset": "0x87731",
+      "compressed": 400,
+      "decoded": 2048,
+      "sha256": "7ff9cd19f1a1bf00af3258a6b298f948922713062828e1a7500652d4e328e603",
+      "vramMatch": null
+    }
+  ],
+  "verifiedBytes": 40960
+}

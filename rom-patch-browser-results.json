@@ -1,0 +1,277 @@
+{
+  "results": [
+    {
+      "stage": "city",
+      "seed": 1,
+      "state": "won",
+      "frames": 2012,
+      "lives": 26,
+      "deaths": 4,
+      "score": 6900
+    },
+    {
+      "stage": "city",
+      "seed": 7,
+      "state": "won",
+      "frames": 2012,
+      "lives": 26,
+      "deaths": 4,
+      "score": 6700
+    },
+    {
+      "stage": "city",
+      "seed": 27,
+      "state": "won",
+      "frames": 2012,
+      "lives": 26,
+      "deaths": 4,
+      "score": 6700
+    },
+    {
+      "stage": "city",
+      "seed": 42,
+      "state": "won",
+      "frames": 2012,
+      "lives": 26,
+      "deaths": 4,
+      "score": 6900
+    },
+    {
+      "stage": "city",
+      "seed": 123,
+      "state": "won",
+      "frames": 2012,
+      "lives": 26,
+      "deaths": 4,
+      "score": 6900
+    },
+    {
+      "stage": "city",
+      "seed": 256,
+      "state": "won",
+      "frames": 2012,
+      "lives": 26,
+      "deaths": 4,
+      "score": 6900
+    },
+    {
+      "stage": "city",
+      "seed": 512,
+      "state": "won",
+      "frames": 2012,
+      "lives": 26,
+      "deaths": 4,
+      "score": 6700
+    },
+    {
+      "stage": "city",
+      "seed": 1024,
+      "state": "won",
+      "frames": 2012,
+      "lives": 26,
+      "deaths": 4,
+      "score": 6800
+    },
+    {
+      "stage": "city",
+      "seed": 1337,
+      "state": "won",
+      "frames": 2155,
+      "lives": 25,
+      "deaths": 5,
+      "score": 6800
+    },
+    {
+      "stage": "city",
+      "seed": 9001,
+      "state": "won",
+      "frames": 2155,
+      "lives": 25,
+      "deaths": 5,
+      "score": 6800
+    },
+    {
+      "stage": "factory",
+      "seed": 1,
+      "state": "won",
+      "frames": 2089,
+      "lives": 26,
+      "deaths": 4,
+      "score": 11200
+    },
+    {
+      "stage": "factory",
+      "seed": 7,
+      "state": "won",
+      "frames": 1862,
+      "lives": 27,
+      "deaths": 3,
+      "score": 11500
+    },
+    {
+      "stage": "factory",
+      "seed": 27,
+      "state": "won",
+      "frames": 1862,
+      "lives": 27,
+      "deaths": 3,
+      "score": 11500
+    },
+    {
+      "stage": "factory",
+      "seed": 42,
+      "state": "won",
+      "frames": 2000,
+      "lives": 26,
+      "deaths": 4,
+      "score": 11600
+    },
+    {
+      "stage": "factory",
+      "seed": 123,
+      "state": "won",
+      "frames": 1862,
+      "lives": 27,
+      "deaths": 3,
+      "score": 11400
+    },
+    {
+      "stage": "factory",
+      "seed": 256,
+      "state": "won",
+      "frames": 2000,
+      "lives": 26,
+      "deaths": 4,
+      "score": 11500
+    },
+    {
+      "stage": "factory",
+      "seed": 512,
+      "state": "won",
+      "frames": 1862,
+      "lives": 27,
+      "deaths": 3,
+      "score": 11500
+    },
+    {
+      "stage": "factory",
+      "seed": 1024,
+      "state": "won",
+      "frames": 1862,
+      "lives": 27,
+      "deaths": 3,
+      "score": 11500
+    },
+    {
+      "stage": "factory",
+      "seed": 1337,
+      "state": "won",
+      "frames": 2000,
+      "lives": 26,
+      "deaths": 4,
+      "score": 11600
+    },
+    {
+      "stage": "factory",
+      "seed": 9001,
+      "state": "won",
+      "frames": 2000,
+      "lives": 26,
+      "deaths": 4,
+      "score": 11500
+    },
+    {
+      "stage": "hive",
+      "seed": 1,
+      "state": "won",
+      "frames": 2610,
+      "lives": 22,
+      "deaths": 8,
+      "score": 6600
+    },
+    {
+      "stage": "hive",
+      "seed": 7,
+      "state": "won",
+      "frames": 2610,
+      "lives": 22,
+      "deaths": 8,
+      "score": 6700
+    },
+    {
+      "stage": "hive",
+      "seed": 27,
+      "state": "won",
+      "frames": 2610,
+      "lives": 22,
+      "deaths": 8,
+      "score": 6700
+    },
+    {
+      "stage": "hive",
+      "seed": 42,
+      "state": "won",
+      "frames": 2610,
+      "lives": 22,
+      "deaths": 8,
+      "score": 6700
+    },
+    {
+      "stage": "hive",
+      "seed": 123,
+      "state": "won",
+      "frames": 2610,
+      "lives": 22,
+      "deaths": 8,
+      "score": 6700
+    },
+    {
+      "stage": "hive",
+      "seed": 256,
+      "state": "won",
+      "frames": 2610,
+      "lives": 22,
+      "deaths": 8,
+      "score": 6600
+    },
+    {
+      "stage": "hive",
+      "seed": 512,
+      "state": "won",
+      "frames": 2610,
+      "lives": 22,
+      "deaths": 8,
+      "score": 6700
+    },
+    {
+      "stage": "hive",
+      "seed": 1024,
+      "state": "won",
+      "frames": 2610,
+      "lives": 22,
+      "deaths": 8,
+      "score": 6700
+    },
+    {
+      "stage": "hive",
+      "seed": 1337,
+      "state": "won",
+      "frames": 2610,
+      "lives": 22,
+      "deaths": 8,
+      "score": 6700
+    },
+    {
+      "stage": "hive",
+      "seed": 9001,
+      "state": "won",
+      "frames": 2610,
+      "lives": 22,
+      "deaths": 8,
+      "score": 6700
+    }
+  ],
+  "canvas": 0,
+  "images": 0,
+  "rasterRequests": 0
+}
