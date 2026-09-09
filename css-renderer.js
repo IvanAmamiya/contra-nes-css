@@ -81,10 +81,9 @@
     human(actor,cam,player=false) {
       if(actor.renderInMap)return;
       if(player&&(actor.respawnTimer>0||!actor.alive||actor.invincible>0&&!(actor.slots&&actor.barrier>0)&&Math.floor(this.time*16)%2))return;
-      if(actor.rom&&window.SpiritsActors){
+      if(actor.rom&&!player&&window.SpiritsActors){
         const anim=window.SpiritsActors.animations;let id,face=actor.facing;
-        if(player){const pose=actor.prone?'prone':actor.clinging?'up':!actor.grounded||actor.spinning?'roll':Math.abs(Math.cos(actor.aim))<.05?'up':Math.sin(actor.aim)<-.1?'upwalk':Math.sin(actor.aim)>.1?'downwalk':Math.abs(actor.vx)>0?'walk':'idle';const list=anim[pose];id=list[Math.floor((pose==='roll'?actor.jumpAge:actor.poseFrame)/4)%list.length];}
-        else if(actor.kind==='car'){id='c3_car';face=1;}
+        if(actor.kind==='car'){id='c3_car';face=1;}
         else if(actor.kind==='sentry'){id='c3_turret';face=-face;}
         else if(actor.kind==='dog'){id='c3_dog';face=-face;}
         else if(actor.nativeArt){id=actor.nativeArt;face=1;}
@@ -133,7 +132,7 @@
       if(world.level.data.spirits)for(const b of world.boss.parts){if(!b.alive||b.x-cam>256||b.nativeArt&&!world.boss.activated)continue;const id=b.nativeArt||(b.kind==='armored'&&b.phase===2?'spirits_brain':'spirits_'+b.kind),a=assets[id];const el=this.sprite(id,b.nativeArt?b.visualX-cam:b.cx-cam-a.width/2,b.nativeArt?b.visualY:b.y+b.h-a.height);if(el&&(b.flash>0||b.telegraph))el.style.filter=b.flash>0?'brightness(2)':'brightness(1.35)';}
       this.human(world.player,cam,true);
       this.barrierLayer.hidden=!(world.level.data.spirits&&world.player.barrier>0&&world.player.alive&&world.player.respawnTimer===0);
-      if(!this.barrierLayer.hidden){const p=world.player,h=p.rom?(p.prone?21:52):(p.prone?17:37),w=p.rom?(p.prone?56:38):24;move(this.barrierLayer,p.cx-cam-w/2,p.y+p.h-h+2);this.barrierLayer.style.height=px(h);this.barrierLayer.style.width=px(w);this.barrierLayer.classList.toggle('fading',p.barrier<=96/60);this.barrierLayer.classList.toggle('pulse',Math.floor(this.time*15)%2===1);}
+      if(!this.barrierLayer.hidden){const p=world.player,h=p.prone?17:37,w=p.prone?32:24;move(this.barrierLayer,p.cx-cam-w/2,p.y+p.h-h+2);this.barrierLayer.style.height=px(h);this.barrierLayer.style.width=px(w);this.barrierLayer.classList.toggle('fading',p.barrier<=96/60);this.barrierLayer.classList.toggle('pulse',Math.floor(this.time*15)%2===1);}
       for(const b of world.bullets){
         if(b.delay>0||b.hiddenByMuzzle)continue;
         if(b.rom&&assets['c3_shot_'+b.code]){const id='c3_shot_'+b.code,a=assets[id];if(!b.exploding){const el=this.sprite(id,b.cx-cam-a.width/2,b.cy-a.height/2);el.style.transformOrigin='50% 50%';el.style.transform+=` rotate(${b.angle}rad)`;}continue;}

@@ -30,10 +30,11 @@ test('真实S枪生成的五颗弹在第16、32帧切换原版三段大小',()=>
   }
 });
 
-test('重建首关渲染原版人物与双层地图，护盾覆盖48像素人物，墙体破坏刷新图块',()=>{
+test('重建首关沿用 FC 人物与双层地图，护盾随人物尺寸，墙体破坏刷新图块',()=>{
  const{renderer:r,count}=boot(true),R=require('../rom-city-core.js'),w=new R.RomCityWorld();w.reset();w.player.invincible=0;r.draw(w,0);
- assert.ok(r.pool.some(e=>!e.hidden&&e.className==='nes-art art-c3_player_idle_0'));assert.equal(r.background.children.length,56);assert.equal(r.land.children.filter(e=>e.className.includes('spirits-platform')).length,0);
- w.player.grantBarrier();r.draw(w,0);assert.equal(r.barrierLayer.style.height,'52px');assert.equal(r.barrierLayer.hidden,false);
+ assert.ok(r.pool.some(e=>!e.hidden&&e.className==='nes-art art-sprite_0f'));assert.equal(r.background.children.length,56);assert.equal(r.land.children.filter(e=>e.className.includes('spirits-platform')).length,0);
+ w.player.grantBarrier();r.draw(w,0);assert.equal(r.barrierLayer.style.height,'37px');assert.equal(r.barrierLayer.hidden,false);
+ for(const [pose,id]of [[{grounded:true,prone:true},'17'],[{prone:false,clinging:{type:'ceiling'}},'16'],[{clinging:null,grounded:false},'08']]){Object.assign(w.player,pose);r.draw(w,0);assert.ok(r.pool.some(e=>!e.hidden&&e.className==='nes-art art-sprite_'+id));assert.ok(!r.pool.some(e=>!e.hidden&&e.className.includes('c3_player')));}
  w.camera=2176;r.draw(w,0);const before=r.chunks.map(e=>e.className);w.level.removedWalls.push(2208);w.level.artRevision++;r.draw(w,0);assert.notDeepEqual(r.chunks.map(e=>e.className),before);assert.ok(count(r.stage)<220);
 });
 

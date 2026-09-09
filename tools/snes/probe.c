@@ -35,7 +35,9 @@ int main(int argc,char**argv){if(argc<2)return 2;HMODULE lib=LoadLibraryA("snes9
  if(getenv("CONTRA_DUMP_EVERY"))dump_every=atoi(getenv("CONTRA_DUMP_EVERY"));
  if(getenv("CONTRA_OUT")&&!SetCurrentDirectoryA(getenv("CONTRA_OUT")))return 9;
  FILE*trace=fopen("trace.csv","w"),*ram=getenv("CONTRA_TRACE_RAM")?fopen("ram-frames.bin","wb"):NULL;if(!trace)return 5;fprintf(trace,"frame,flags,timer,lives,x,y,stage\n");
+ void (*trace_frame)(unsigned)=(void*)GetProcAddress(lib,"retro_contra_trace_frame");
  for(frame=0;frame<frames;frame++){
+  if(trace_frame)trace_frame(frame);
   keys=(frame==120||frame==240||frame==360)?1<<RETRO_DEVICE_ID_JOYPAD_START:0;
   if(frame>=950&&frame<1080)keys=(1<<RETRO_DEVICE_ID_JOYPAD_RIGHT)|(1<<RETRO_DEVICE_ID_JOYPAD_Y);
   if(frame>=800&&frame<950||frame>=1080)keys=1<<RETRO_DEVICE_ID_JOYPAD_Y;

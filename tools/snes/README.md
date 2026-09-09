@@ -17,4 +17,8 @@ The first uses ordinary controller input. A third argument enables the documente
 
 Validation used Snes9x 1.63 commit 890b5d4, snapshot version 0014. Core SHA-256 is in ../../ROM_ANALYSIS.md. Dependencies are obtained externally; no emulator/ROM is embedded in the game.
 
+`install-trace.cjs` installs `trace-hook.h` into a separately obtained, pinned Snes9x checkout. `CONTRA_CPU_TRACE` enables read-only SA-1 instruction logging; optional `CONTRA_TRACE_ACTOR`, `CONTRA_TRACE_FIRST`, and `CONTRA_TRACE_LAST` narrow the trace. `trace-disassemble.cjs ROM CSV OUTPUT_JSON` uses recorded M/X flags and verifies each opcode against the known ROM hash before decoding. It rejects unknown memory mappings rather than guessing. `logic-reference.cjs` and `logic-evidence.cjs` produce compact test/public evidence from private captures. Full steps, limitations and measured routines: [ROM_LOGIC.md](../../ROM_LOGIC.md).
+
+The opcode/address-mode tables in `opcodes.cjs` are from MesenCE commit c6cea79f36afd33954fde6174418b3d944d0da88, GPL-3.0-or-later; the URL is preserved in the file. The tracer currently instruments the SA-1 CPU only. Object filtering omits temporary X values and is not a complete call graph.
+
 References: [SNESTilesKitten 7ed9e3f](https://github.com/Skarsnik/SNESTilesKitten/tree/7ed9e3fd1a1891bfb1dd32ac5b887722d0918562), [sneshacking 4be0df0](https://github.com/Skarsnik/sneshacking/tree/4be0df0dc6ad3b3ab0d5397a172c67bb0e5767d9), [Proton Konami SNES decompressor](https://github.com/ProtonNoir/SNES-decompression-tools/blob/8149ef6f2bcf121565db63251fe0d3dc429d8b50/Konami/konami_d.cpp), [Snes9x snapshot format](https://github.com/libretro/snes9x/blob/890b5d4/snapshot.cpp).

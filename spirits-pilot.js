@@ -4,7 +4,8 @@
  next(w){this.frames++;const p=w.player,input={right:true,fire:true};
   if(p.respawnTimer)return{};
   if(w.level.data.rom&&!w.boss.activated){
-   if(p.clinging){input.right=true;input.down=false;input.jump=p.cx>p.clinging.x+p.clinging.w-12&&!this.lastJump;}
+   if(p.clinging){input.right=true;input.down=false;if(p.clinging.type==='wall')input.up=true;else input.jump=p.cx>p.clinging.x+p.clinging.w-12&&!this.lastJump;}
+   else if(p.touchingWall)input.up=true;
    else if(p.grounded&&!this.lastJump){const foot=p.y+p.h,edge=p.support&&p.support.x+p.support.w-p.cx<8,higher=w.level.platforms.some(t=>t.x+t.w>p.cx+6&&t.x<p.cx+14&&t.y<foot-8&&t.y>=foot-68);input.jump=!!(edge||higher);}
    else if(!p.grounded&&w.level.grips.some(g=>g.x+g.w>p.cx&&g.x<p.cx+12&&g.y>p.y-8&&g.y<p.y+p.h))input.up=true;
    this.lastJump=!!input.jump;return input;

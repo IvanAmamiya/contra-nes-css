@@ -1,12 +1,9 @@
 {
-  "canvas": 0,
-  "fps": 58.4,
   "frames": 600,
-  "images": 0,
-  "intervalP95Ms": 16.799999999999272,
-  "maxNodes": 164,
-  "rasterRequests": 0,
+  "fps": 57.8,
   "renderP95Ms": 0.5,
+  "intervalP95Ms": 16.80000000000291,
+  "maxNodes": 167,
   "results": [
     {
       "stage": "city",
@@ -20,5 +17,8 @@
       "stage": "hive",
       "state": "won"
     }
-  ]
+  ],
+  "canvas": 0,
+  "images": 0,
+  "rasterRequests": 0
 }

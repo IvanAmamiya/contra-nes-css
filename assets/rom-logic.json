@@ -1,0 +1,592 @@
+{
+  "scope": "Partial reverse engineering of Contra III on a modified SA-1 ROM; not a full SFC game decompilation.",
+  "romSha256": "44ebb9a450b5b77341fc9130ab45767a13212c242350aad450a4526f8a8d8017",
+  "coreCommit": "890b5d445538fe790aa3add3d5702c80f551e0ae",
+  "instrumentedCoreSha256": "2a72bdf12a390748801bb9fbf803062bbdc3b7491d0c23246722d7608e12c12c",
+  "validation": {
+    "stairsComparedFrames": 111,
+    "stairsCoordinateMismatches": 0,
+    "landingFrames": [
+      {
+        "frame": 94,
+        "feet": 144
+      },
+      {
+        "frame": 128,
+        "feet": 72
+      }
+    ],
+    "note": "Coordinates compared by tests/city-logic.test.cjs. Collision/player update only; NPC behavior and sprite hitboxes are not covered by this equality claim."
+  },
+  "limitations": [
+    "SA-1 CPU only; main CPU/SPC/DMA execution not traced.",
+    "Actor filter uses X and D; temporary X values are omitted, so this is not a complete instruction stream.",
+    "Natural controller input in these runs; loaded exploration snapshots can contain previously granted protection.",
+    "Tank/fire/Boss implementation is not established merely by locating routines."
+  ],
+  "runs": [
+    {
+      "name": "trace-stairs-landing",
+      "actor": 254,
+      "frames": 160,
+      "traceRows": 136927,
+      "instructionVariants": 845,
+      "possiblyTruncated": false,
+      "traceSha256": "d8e704a90b0e2fc8bea8f5f92e4e264c4358cb417202341dc5440f924db4a94d",
+      "ramSha256": "d366ae2797d0778a457c2f4b7243f51de1239e0894e7e16f191119b4a8e66924",
+      "sourceStateSha256": "43b78752ac80a9f706b6e870cb22e15f9ffab47666dda7b1d61f24f667e13c86",
+      "inputCsv": "0,48,130\r\n48,100,2\r\n60,61,3\r\n100,160,130\r\n105,106,131",
+      "inputSha256": "16e8d89b9359798ff8363c8a70c372ce42e1d967b07f0ec443f33bd3bde71a68",
+      "transitions": [],
+      "instructions": [
+        {
+          "pc": "0185D0",
+          "offset": "0085D0",
+          "bytes": "A504",
+          "size": 2,
+          "mnemonic": "LDA",
+          "operand": "$04",
+          "mode": "Dir",
+          "count": 3,
+          "firstFrame": 46,
+          "lastFrame": 128,
+          "sample": {
+            "p": "06",
+            "a": "2002",
+            "x": "0200",
+            "y": "0000",
+            "d": "6000",
+            "db": "05",
+            "actor": 254,
+            "state": 3
+          }
+        },
+        {
+          "pc": "0193DB",
+          "offset": "0093DB",
+          "bytes": "18",
+          "size": 1,
+          "mnemonic": "CLC",
+          "operand": "",
+          "mode": "Imp",
+          "count": 59,
+          "firstFrame": 46,
+          "lastFrame": 159,
+          "sample": {
+            "p": "04",
+            "a": "0002",
+            "x": "0200",
+            "y": "0000",
+            "d": "6000",
+            "db": "05",
+            "actor": 254,
+            "state": 3
+          }
+        },
+        {
+          "pc": "0193DF",
+          "offset": "0093DF",
+          "bytes": "750E",
+          "size": 2,
+          "mnemonic": "ADC",
+          "operand": "$0E,X",
+          "mode": "DirIdxX",
+          "count": 59,
+          "firstFrame": 46,
+          "lastFrame": 159,
+          "sample": {
+            "p": "06",
+            "a": "0000",
+            "x": "0200",
+            "y": "0000",
+            "d": "6000",
+            "db": "05",
+            "actor": 254,
+            "state": 3
+          }
+        }
+      ]
+    },
+    {
+      "name": "trace-wall",
+      "actor": 4,
+      "frames": 240,
+      "traceRows": 94906,
+      "instructionVariants": 330,
+      "possiblyTruncated": false,
+      "traceSha256": "a4faa40a5e17b12256857fe970774261e5e95626894ae361968436935c48d099",
+      "ramSha256": "0d7af92b93a976b840e20fed330ee5c1c7a98e03c4b64f5650d7aca4f1b30d0b",
+      "sourceStateSha256": "7e2fe380d96f722603878c18843b376f5db79ba0d586f80de811a97cd997f102",
+      "inputCsv": "0,240,130",
+      "inputSha256": "df2bcdad9c6660b7de4745febfe0f2c4c29e88b7cefdccdf86c0fe50f47dbfc2",
+      "transitions": [
+        {
+          "frame": 0,
+          "camera": 2048,
+          "playerState": 3,
+          "objects": [
+            {
+              "slot": 2304,
+              "state": 2,
+              "hp": 0,
+              "x": 177
+            }
+          ]
+        },
+        {
+          "frame": 90,
+          "camera": 2048,
+          "playerState": 0,
+          "objects": [
+            {
+              "slot": 2304,
+              "state": 3,
+              "hp": 0,
+              "x": 177
+            }
+          ]
+        },
+        {
+          "frame": 91,
+          "camera": 2048,
+          "playerState": 0,
+          "objects": [
+            {
+              "slot": 2304,
+              "state": 4,
+              "hp": 0,
+              "x": 177
+            }
+          ]
+        },
+        {
+          "frame": 103,
+          "camera": 2048,
+          "playerState": 0,
+          "objects": [
+            {
+              "slot": 2304,
+              "state": 5,
+              "hp": 0,
+              "x": 177
+            }
+          ]
+        },
+        {
+          "frame": 201,
+          "camera": 2048,
+          "playerState": 0,
+          "objects": []
+        }
+      ],
+      "instructions": [
+        {
+          "pc": "01C5EA",
+          "offset": "00C5EA",
+          "bytes": "A90080",
+          "size": 3,
+          "mnemonic": "LDA",
+          "operand": "#$8000",
+          "mode": "ImmM",
+          "count": 1,
+          "firstFrame": 90,
+          "lastFrame": 90,
+          "sample": {
+            "p": "85",
+            "a": "FFFD",
+            "x": "0900",
+            "y": "08C0",
+            "d": "6000",
+            "db": "05",
+            "actor": 4,
+            "state": 2
+          }
+        },
+        {
+          "pc": "01C5ED",
+          "offset": "00C5ED",
+          "bytes": "8DD668",
+          "size": 3,
+          "mnemonic": "STA",
+          "operand": "$68D6",
+          "mode": "Abs",
+          "count": 1,
+          "firstFrame": 90,
+          "lastFrame": 90,
+          "sample": {
+            "p": "85",
+            "a": "8000",
+            "x": "0900",
+            "y": "08C0",
+            "d": "6000",
+            "db": "05",
+            "actor": 4,
+            "state": 2
+          }
+        },
+        {
+          "pc": "01C5F0",
+          "offset": "00C5F0",
+          "bytes": "8D5668",
+          "size": 3,
+          "mnemonic": "STA",
+          "operand": "$6856",
+          "mode": "Abs",
+          "count": 1,
+          "firstFrame": 90,
+          "lastFrame": 90,
+          "sample": {
+            "p": "85",
+            "a": "8000",
+            "x": "0900",
+            "y": "08C0",
+            "d": "6000",
+            "db": "05",
+            "actor": 4,
+            "state": 2
+          }
+        },
+        {
+          "pc": "01C5F3",
+          "offset": "00C5F3",
+          "bytes": "8D9668",
+          "size": 3,
+          "mnemonic": "STA",
+          "operand": "$6896",
+          "mode": "Abs",
+          "count": 1,
+          "firstFrame": 90,
+          "lastFrame": 90,
+          "sample": {
+            "p": "85",
+            "a": "8000",
+            "x": "0900",
+            "y": "08C0",
+            "d": "6000",
+            "db": "05",
+            "actor": 4,
+            "state": 2
+          }
+        },
+        {
+          "pc": "01C609",
+          "offset": "00C609",
+          "bytes": "F612",
+          "size": 2,
+          "mnemonic": "INC",
+          "operand": "$12,X",
+          "mode": "DirIdxX",
+          "count": 1,
+          "firstFrame": 91,
+          "lastFrame": 91,
+          "sample": {
+            "p": "05",
+            "a": "0044",
+            "x": "0900",
+            "y": "08C0",
+            "d": "6000",
+            "db": "05",
+            "actor": 4,
+            "state": 3
+          }
+        },
+        {
+          "pc": "01C611",
+          "offset": "00C611",
+          "bytes": "C91700",
+          "size": 3,
+          "mnemonic": "CMP",
+          "operand": "#$0017",
+          "mode": "ImmM",
+          "count": 17,
+          "firstFrame": 91,
+          "lastFrame": 91,
+          "sample": {
+            "p": "07",
+            "a": "0000",
+            "x": "0900",
+            "y": "0300",
+            "d": "6000",
+            "db": "05",
+            "actor": 4,
+            "state": 4
+          }
+        },
+        {
+          "pc": "01C634",
+          "offset": "00C634",
+          "bytes": "F612",
+          "size": 2,
+          "mnemonic": "INC",
+          "operand": "$12,X",
+          "mode": "DirIdxX",
+          "count": 1,
+          "firstFrame": 103,
+          "lastFrame": 103,
+          "sample": {
+            "p": "07",
+            "a": "0000",
+            "x": "0900",
+            "y": "08C0",
+            "d": "6000",
+            "db": "05",
+            "actor": 4,
+            "state": 4
+          }
+        },
+        {
+          "pc": "01C637",
+          "offset": "00C637",
+          "bytes": "A90400",
+          "size": 3,
+          "mnemonic": "LDA",
+          "operand": "#$0004",
+          "mode": "ImmM",
+          "count": 98,
+          "firstFrame": 104,
+          "lastFrame": 201,
+          "sample": {
+            "p": "04",
+            "a": "C637",
+            "x": "0900",
+            "y": "000C",
+            "d": "6000",
+            "db": "05",
+            "actor": 4,
+            "state": 5
+          }
+        }
+      ]
+    },
+    {
+      "name": "trace-tank",
+      "actor": 9,
+      "frames": 360,
+      "traceRows": 91503,
+      "instructionVariants": 356,
+      "possiblyTruncated": false,
+      "traceSha256": "eee20660a4773e5fab1971080849ee7d783e89fcdc93266ab7757c30f0a8869d",
+      "ramSha256": "5a7f77efb10670b17a5eb1d312a0e9d629389ed3a8621eac7e71587356517171",
+      "sourceStateSha256": "b69207f69a57f8ea80aa1c10983c33e959850aa2d5b75b4fea533dd67bc35610",
+      "inputCsv": "0,360,130\r\n0,1,131\r\n60,61,131\r\n120,121,131\r\n180,181,131",
+      "inputSha256": "795591c41dc137d4ff05528124ac28a52b8f35851c6268b73bf0858a915bb852",
+      "transitions": [
+        {
+          "frame": 0,
+          "camera": 2248,
+          "playerState": 3,
+          "objects": [
+            {
+              "slot": 2496,
+              "state": 1,
+              "hp": 16,
+              "x": 186
+            }
+          ]
+        },
+        {
+          "frame": 40,
+          "camera": 2305,
+          "playerState": 9,
+          "objects": [
+            {
+              "slot": 2496,
+              "state": 2,
+              "hp": 16,
+              "x": 129
+            }
+          ]
+        },
+        {
+          "frame": 60,
+          "camera": 2333,
+          "playerState": 3,
+          "objects": [
+            {
+              "slot": 2496,
+              "state": 1,
+              "hp": 16,
+              "x": 103
+            }
+          ]
+        },
+        {
+          "frame": 225,
+          "camera": 2565,
+          "playerState": 3,
+          "objects": [
+            {
+              "slot": 2496,
+              "state": 4,
+              "hp": 16,
+              "x": -129
+            }
+          ]
+        }
+      ],
+      "instructions": [
+        {
+          "pc": "01B9E9",
+          "offset": "00B9E9",
+          "bytes": "898000",
+          "size": 3,
+          "mnemonic": "BIT",
+          "operand": "#$0080",
+          "mode": "ImmM",
+          "count": 207,
+          "firstFrame": 0,
+          "lastFrame": 225,
+          "sample": {
+            "p": "06",
+            "a": "0000",
+            "x": "09C0",
+            "y": "0200",
+            "d": "6000",
+            "db": "05",
+            "actor": 9,
+            "state": 1
+          }
+        },
+        {
+          "pc": "01BA1C",
+          "offset": "00BA1C",
+          "bytes": "8C5876",
+          "size": 3,
+          "mnemonic": "STY",
+          "operand": "$7658",
+          "mode": "Abs",
+          "count": 1,
+          "firstFrame": 40,
+          "lastFrame": 40,
+          "sample": {
+            "p": "05",
+            "a": "00B1",
+            "x": "09C0",
+            "y": "0200",
+            "d": "6000",
+            "db": "05",
+            "actor": 9,
+            "state": 1
+          }
+        },
+        {
+          "pc": "01BA22",
+          "offset": "00BA22",
+          "bytes": "692800",
+          "size": 3,
+          "mnemonic": "ADC",
+          "operand": "#$0028",
+          "mode": "ImmM",
+          "count": 1,
+          "firstFrame": 40,
+          "lastFrame": 40,
+          "sample": {
+            "p": "04",
+            "a": "0081",
+            "x": "09C0",
+            "y": "0200",
+            "d": "6000",
+            "db": "05",
+            "actor": 9,
+            "state": 1
+          }
+        },
+        {
+          "pc": "01BA25",
+          "offset": "00BA25",
+          "bytes": "990A60",
+          "size": 3,
+          "mnemonic": "STA",
+          "operand": "$600A,Y",
+          "mode": "AbsIdxY",
+          "count": 1,
+          "firstFrame": 40,
+          "lastFrame": 40,
+          "sample": {
+            "p": "04",
+            "a": "00A9",
+            "x": "09C0",
+            "y": "0200",
+            "d": "6000",
+            "db": "05",
+            "actor": 9,
+            "state": 1
+          }
+        },
+        {
+          "pc": "01BA28",
+          "offset": "00BA28",
+          "bytes": "A90900",
+          "size": 3,
+          "mnemonic": "LDA",
+          "operand": "#$0009",
+          "mode": "ImmM",
+          "count": 1,
+          "firstFrame": 40,
+          "lastFrame": 40,
+          "sample": {
+            "p": "04",
+            "a": "00A9",
+            "x": "09C0",
+            "y": "0200",
+            "d": "6000",
+            "db": "05",
+            "actor": 9,
+            "state": 1
+          }
+        },
+        {
+          "pc": "01BA2B",
+          "offset": "00BA2B",
+          "bytes": "991260",
+          "size": 3,
+          "mnemonic": "STA",
+          "operand": "$6012,Y",
+          "mode": "AbsIdxY",
+          "count": 1,
+          "firstFrame": 40,
+          "lastFrame": 40,
+          "sample": {
+            "p": "04",
+            "a": "0009",
+            "x": "09C0",
+            "y": "0200",
+            "d": "6000",
+            "db": "05",
+            "actor": 9,
+            "state": 1
+          }
+        },
+        {
+          "pc": "01BA2E",
+          "offset": "00BA2E",
+          "bytes": "F612",
+          "size": 2,
+          "mnemonic": "INC",
+          "operand": "$12,X",
+          "mode": "DirIdxX",
+          "count": 1,
+          "firstFrame": 40,
+          "lastFrame": 40,
+          "sample": {
+            "p": "04",
+            "a": "0009",
+            "x": "09C0",
+            "y": "0200",
+            "d": "6000",
+            "db": "05",
+            "actor": 9,
+            "state": 1
+          }
+        }
+      ]
+    }
+  ],
+  "tracerControl": {
+    "frames": 160,
+    "comparedBytes": 1310720,
+    "mismatchingBytes": 0,
+    "ramSha256": "d366ae2797d0778a457c2f4b7243f51de1239e0894e7e16f191119b4a8e66924",
+    "uninstrumentedCoreSha256": "634c15450fffc40e5ceef8cefac7d1df4bcc22bc4f63ba3e14cf4cb81f6c4be7"
+  }
+}

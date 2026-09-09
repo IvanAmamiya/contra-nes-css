@@ -1,5 +1,7 @@
 # 参考与素材来源
 
+v2.1.1：SA-1 只读追踪基于 [libretro/snes9x 890b5d4](https://github.com/libretro/snes9x/tree/890b5d445538fe790aa3add3d5702c80f551e0ae) 外部源码构建。反汇编操作码/寻址表来自 [MesenCE c6cea79](https://github.com/nesdev-org/MesenCE/blob/c6cea79f36afd33954fde6174418b3d944d0da88/Core/SNES/Debugger/SnesDisUtils.cpp)，工具目录沿用 GPL-3.0-or-later。没有在网页中嵌入模拟器；完整 ROM 和运行快照未发布。逻辑证据与边界见 [ROM_LOGIC.md](ROM_LOGIC.md)。
+
 v2.0.1：构建时提取参考 SNESTilesKitten（Sylvain "Skarsnik" Colinet）与 Proton 的 Konami SNES 解压研究。`tools/snes/` 中的工具附 GPL-3.0-or-later 许可，游戏运行时不加载它们。炸弹图标和 ROM 对照页来自本机已有的修改版 ROM，素材版权仍属 Konami。确切输入哈希、源码提交和验证边界见 [ROM_ANALYSIS.md](ROM_ANALYSIS.md)。
 
 本项目为使用原生 JavaScript 重新实现的《魂斗罗》一代首关练习及《魂斗罗精神》FC 风格扩展，不是 Konami 官方产品。

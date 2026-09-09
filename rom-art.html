@@ -4,7 +4,8 @@
 <style>body{margin:0;background:#101319;color:#e3e7ed;font:16px/1.7 system-ui}main{max-width:1140px;margin:40px auto;padding:0 20px}h1{font-size:28px}a{color:#73cbef}.grid{display:flex;flex-wrap:wrap;gap:24px}figure{margin:0}figcaption{margin:10px 0}.frame{width:512px;height:448px;background:#000;overflow:hidden}.screen{width:256px;height:224px;transform:scale(2);transform-origin:0 0}p{max-width:850px}.tag{color:#f8b800}@media(max-width:560px){.frame{width:256px;height:224px}.screen{transform:none}}</style>
 <main><a href="index.html">← 返回游戏</a><h1>Contra III · 从 ROM 到 CSS</h1><p class="tag">实际 ROM 解压 → 显存逐字节核对 → 图块、调色板与精灵拼装 → FC 配色</p>
 <div class="grid"><figure><figcaption>ROM 首屏素材 · 原调色板</figcaption><div class="frame"><div class="screen rom-original" role="img" aria-label="从 ROM 显存图块重组的第一关城市首屏"></div></div></figure><figure><figcaption>同一批像素 · FC 配色实验</figcaption><div class="frame"><div class="screen rom-fc" role="img" aria-label="相同场景按16乘16像素区块限制四色的FC适配"></div></div></figure></div>
-<p><a href="index.html">试玩首关重建版：28 屏原版地图与原生人物动作</a> · <a href="ROM_CITY.md">完成范围、运行对照与剩余工作</a></p>
+<p><a href="index.html">试玩首关重建版：28 屏原版地图与 FC 人物</a> · <a href="ROM_CITY.md">完成范围、运行对照与剩余工作</a></p>
+<h2>逻辑逆向：已完成局部追踪</h2><p>已记录台阶、墙体、坦克三段 SA-1 执行过程，共 323,336 条指令记录。台阶 111 帧横坐标与脚底坐标和 JavaScript 重建完全一致；已定位墙体死亡过渡和坦克上车状态切换。这不代表整款游戏已经逆向完成：坦克驾驶、火场与完整 Boss 动画仍待接入。</p><p><a href="ROM_LOGIC.md">指令地址、状态变化与复现方法</a> · <a href="assets/rom-logic.json">三段追踪的哈希与小型证据</a></p>
 <p>两张画面均由 CSS 渐变绘制，不加载图片、Canvas 或 SVG。右侧每个 16×16 区块最多四种颜色，保留原像素分辨率。这是素材提取校验页；游戏关卡重建仍在进行。</p>
 <p>已提取 25 个已知背景、布局及精灵数据块；其中第一关 7 块共 40,960 字节与运行时显存完全一致。输入为本机已有的 SA-1 改版 ROM，不能把该版本的测量冒充未修改美版的全部行为。</p>
 <p><a href="ROM_ANALYSIS.md">提取方法、证据与限制</a> · <a href="assets/rom-extraction.json">各数据块的地址与校验值</a> · <a href="https://github.com/Skarsnik/SNESTilesKitten">SNESTilesKitten</a></p></main></html>

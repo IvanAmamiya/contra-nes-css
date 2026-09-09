@@ -31,7 +31,7 @@ class RomWeapon {
  }
 }
 class RomPlayer extends S.SpiritsPlayer {
- constructor(){super(50,160);this.w=12;this.h=40;this.slots=[new RomWeapon(),new RomWeapon()];this.weapon=this.slots[0];this.poseFrame=0;this.jumpAge=0;this.rom=true;}
+ constructor(){super(50,170);this.slots=[new RomWeapon(),new RomWeapon()];this.weapon=this.slots[0];this.poseFrame=0;this.jumpAge=0;this.rom=true;}
  equip(weapon){this.slots[this.activeSlot]=weapon instanceof RomWeapon?weapon:new RomWeapon(weapon.code);this.weapon=this.slots[this.activeSlot];}
  update(dt,input,world){
   if(this.respawnTimer>0){this.respawnTimer=Math.max(0,this.respawnTimer-dt);if(this.respawnTimer<1e-9)world.respawn();this.wasJump=!!input.jump;this.wasSwap=!!input.swap;this.wasBomb=!!input.bomb;return;}
@@ -42,25 +42,33 @@ class RomPlayer extends S.SpiritsPlayer {
   const axis=+!!input.right-+!!input.left,up=input.up&&!input.down,down=input.down&&!input.up;
   if(axis)this.facing=axis;
   this.spinning=!!input.spin;this.prone=this.grounded&&down&&!axis&&!this.spinning;
-  this.resize(this.prone?32:12,this.prone?12:40);
+  this.resize(this.prone?24:12,this.prone?9:30);
   this.vx=this.prone||input.lock||this.spinning?0:axis*PHYSICS.walk;
   const launch=input.jump&&!this.wasJump;
   if(launch&&this.clinging){this.clinging=null;this.gripCooldown=.3;this.vy=down?90:PHYSICS.jump;this.justJumped=!down;this.jumpAge=0;}
   else if(launch&&this.grounded){
    if(down&&this.support&&this.support.y<192){this.dropTimer=.22;this.y+=2;this.vy=60;}
    else{this.vy=PHYSICS.jump;this.justJumped=true;this.jumpAge=0;world.emit('jump',{x:this.cx,y:this.y});}
-   this.grounded=false;this.prone=false;this.resize(12,40);
+   this.grounded=false;this.prone=false;this.resize(12,30);
   }
   if(!this.clinging&&up&&this.gripCooldown===0)this.clinging=world.level.grips.find(g=>overlap(this,{x:g.x-4,y:g.y-4,w:g.w+8,h:g.h+8}))||null;
-  if(this.clinging){const g=this.clinging;this.x=clamp(this.x+axis*48*dt,g.x-6,g.x+g.w-6);this.y=g.type==='ceiling'?g.y+4:clamp(this.y+(+!!down-+!!up)*48*dt,g.y-16,g.y+g.h-this.h);this.vy=0;this.grounded=false;}
+  if(this.clinging){const g=this.clinging;
+   if(g.type==='wall'){
+    this.x=g.side==='left'?g.x-this.w:g.x+g.w;this.y+=(+!!down-+!!up)*48*dt;
+    if(this.y+this.h<=g.y+2){this.y=g.y-this.h;this.x=g.side==='left'?g.x+1:g.x+g.w-this.w-1;this.clinging=null;this.grounded=true;this.gripCooldown=.2;}
+    else if(this.y+this.h>g.y+g.h){this.clinging=null;this.gripCooldown=.2;}
+   }else{this.x=clamp(this.x+axis*48*dt,g.x-6,g.x+g.w-6);this.y=g.y+4;}
+   this.vy=0;this.grounded=!(this.clinging);
+  }
   else world.collision.move(this,dt,world.level);
+  if(!this.clinging&&this.touchingWall&&this.gripCooldown===0&&(up||!this.grounded&&axis))this.clinging=this.touchingWall;
   this.x=clamp(this.x,world.camera,world.level.width-this.w);if(this.y>248){world.hurtPlayer(true);return;}
   this.poseFrame+=dt*60;if(!this.grounded)this.jumpAge+=dt*60;
   this.aim=up?(axis?Math.atan2(-1,axis):-Math.PI/2):down&&!this.prone?(axis?Math.atan2(1,axis):!this.grounded||this.clinging?Math.PI/2:this.facing<0?Math.PI:0):this.facing<0?Math.PI:0;
   this.wasJump=!!input.jump;this.wasFire=!!input.fire;
   const angles=this.spinning?[world.time*13,world.time*13+Math.PI]:[this.aim],feet=this.y+this.h;
   angles.forEach((angle,i)=>{const gun=this.spinning?this.slots[i]:this.weapon;
-   const muzzleY=this.prone?feet-8:feet-27+(Math.sin(angle)<-.1?-12:Math.sin(angle)>.1?6:0);
+   const muzzleY=this.prone?feet-5:feet-20+(Math.sin(angle)<-.1?-9:Math.sin(angle)>.1?6:0);
    const shots=gun.tryFire({time:world.time,x:this.cx+Math.cos(angle)*(this.prone?24:16),y:muzzleY,angle,held:input.fire||input.turbo||this.spinning});
    world.bullets.push(...shots);if(shots.length){world.shots+=shots.length;world.emit('shot',{x:this.cx,y:muzzleY,code:gun.code});}
   });
@@ -71,7 +79,7 @@ class RomCityLevel extends C.Level {
   for(let row=0;row<28;row++){
    let start=-1;for(let col=0;col<=896;col++){
     const code=col<896?DATA.collision[row*896+col]:0,above=row?DATA.collision[(row-1)*896+col]:0;
-    const top=code===0x2002&&above!==0x2002;
+    const top=(code===0x2002||code===4)&&above!==code;
     if(top&&start<0)start=col;
     if(!top&&start>=0){this.platforms.push({x:start*8,y:row*8,w:(col-start)*8,h:8,active:true,breakAt:Infinity});start=-1;}
     if(code===4)this.grips.push({x:col*8,y:row*8,w:8,h:8,type:'ceiling'});
@@ -80,8 +88,15 @@ class RomCityLevel extends C.Level {
   }
   // Merge contiguous climbable cells so a character can traverse a rail without sticking to one tile.
   this.grips.sort((a,b)=>a.y-b.y||a.x-b.x);this.grips=this.grips.reduce((a,g)=>{let p=a.at(-1);if(p&&p.y===g.y&&p.x+p.w===g.x)p.w+=g.w;else a.push({...g});return a;},[]);
+  // Solid tile faces matter as well as their tops: pillars must not be walk-through scenery.
+  for(let row=0;row<28;row++)for(let col=0;col<896;){
+   if(DATA.collision[row*896+col]!==0x2002){col++;continue;}
+   const start=col;while(col<896&&DATA.collision[row*896+col]===0x2002)col++;
+   const x=start*8,w=(col-start)*8,previous=this.solids.find(s=>s.x===x&&s.w===w&&s.y+s.h===row*8);
+   if(previous)previous.h+=8;else this.solids.push({x,y:row*8,w,h:8});
+  }
  }
- safeSpawn(camera){const x=camera+40,candidates=this.platforms.filter(p=>p.active&&p.w>=24&&p.x+p.w>camera+16&&p.x<camera+208&&p.y>=80&&p.y<=216).sort((a,b)=>Math.abs(clamp(x,a.x+8,a.x+a.w-8)-x)-Math.abs(clamp(x,b.x+8,b.x+b.w-8)-x)||b.y-a.y);if(candidates.length){const p=candidates[0];return{x:clamp(x,p.x+8,p.x+p.w-20),y:p.y-40};}return{x,y:40};}
+ safeSpawn(camera){const x=camera+40,candidates=this.platforms.filter(p=>p.active&&p.w>=24&&p.x+p.w>camera+16&&p.x<camera+208&&p.y>=48&&p.y<=216).sort((a,b)=>Math.abs(clamp(x,a.x+8,a.x+a.w-8)-x)-Math.abs(clamp(x,b.x+8,b.x+b.w-8)-x)||b.y-a.y);if(candidates.length){const p=candidates[0];return{x:clamp(x,p.x+8,p.x+p.w-20),y:p.y-30};}return{x,y:40};}
 }
 class RomPickup extends S.SpiritsPickup {
  apply(world){if(!this.alive)return;this.alive=false;const p=world.player;if(this.code==='B')p.grantBarrier();else if(this.code==='bomb')p.bombs=Math.min(5,p.bombs+1);else p.equip(new RomWeapon(this.code));world.emit('pickup',{x:this.cx,y:this.cy,code:this.code});}
@@ -104,7 +119,7 @@ class RomEnemy extends Character {
 class RomGate extends Character {
  constructor(event){super(event.trigger+event.screenX+12,164,24,24,96,'enemy');this.kind='wall-core';this.rom=true;this.renderInMap=true;this.age=0;this.nextShot=.8;this.lock=event.trigger+80;this.clearX=event.screen===7?2208:3232;}
  update(dt,world){this.age+=dt;this.flash=Math.max(0,this.flash-dt);if(this.age>this.nextShot){this.nextShot=this.age+1.4;for(const y of [112,144]){const a=Math.atan2(world.player.cy-y,world.player.cx-this.x);world.bullets.push(new Bullet(this.x-12,y,a,'enemy',90));}}}
- onDeath(world){world.level.removedWalls.push(this.clearX);world.level.artRevision++;world.level.platforms.push({x:this.clearX,y:200,w:96,h:24,active:true,breakAt:Infinity});world.addScore(3000);world.kills++;world.emit('explosion',{x:this.cx,y:144,big:true});}
+ onDeath(world){world.clearEncounter(this);world.level.removedWalls.push(this.clearX);world.level.artRevision++;world.level.platforms.push({x:this.clearX,y:200,w:96,h:24,active:true,breakAt:Infinity});world.addScore(3000);world.kills++;world.emit('explosion',{x:this.cx,y:144,big:true});}
 }
 class ShellSpawn extends Character {
  constructor(x,y,flying){super(x,y,12,12,2,'enemy');this.kind='shell-spawn';this.rom=true;this.flying=flying;this.vx=-84;this.originY=y;this.age=0;this.nativeArt='c3_shot_C';}
@@ -121,11 +136,18 @@ class TortoiseBoss extends Character {
 }
 class RomCollision extends S.SpiritsCollision {
  move(body,dt,level){
-  body.x+=body.vx*dt;const bottom=body.y+body.h;
+  const oldX=body.x,bottom=body.y+body.h,oldY=body.y;body.touchingWall=null;body.x+=body.vx*dt;
+  for(const s of level.solids){
+   if(level.removedWalls?.some(x=>s.x>=x&&s.x<x+96)||body.y+body.h<=s.y+.01||body.y>=s.y+s.h-.01)continue;
+   if(body.vx>0&&oldX+body.w<=s.x+.01&&body.x+body.w>s.x){body.x=s.x-body.w;body.touchingWall={...s,type:'wall',side:'left'};}
+   if(body.vx<0&&oldX>=s.x+s.w-.01&&body.x<s.x+s.w){body.x=s.x+s.w;body.touchingWall={...s,type:'wall',side:'right'};}
+  }
   if(body.justJumped){body.justJumped=false;body.vy+=PHYSICS.gravity*dt;body.grounded=false;body.support=null;return;}
   body.y+=body.vy*dt;body.vy=Math.min(360,body.vy+PHYSICS.gravity*dt);body.grounded=false;body.support=null;
-  if(body.vy<0||body.dropTimer>0)return;
-  let landing=null;for(const p of level.platforms){if(!p.active||body.cx<p.x||body.cx>=p.x+p.w||bottom>p.y+.01||body.y+body.h<p.y)continue;if(!landing||p.y<landing.y)landing=p;}
+  if(body.vy<0){for(const s of level.solids)if(body.x+body.w>s.x&&body.x<s.x+s.w&&oldY>=s.y+s.h-.01&&body.y<s.y+s.h){body.y=s.y+s.h;body.vy=0;}return;}
+  if(body.dropTimer>0)return;
+  // ROM $01857A / $0193DB: sample both feet and align downward contact to an 8px tile.
+  let landing=null;for(const p of level.platforms){if(!p.active||body.cx+6<p.x||body.cx>=p.x+p.w||bottom>=p.y+8||body.y+body.h<p.y)continue;if(!landing||p.y<landing.y)landing=p;}
   if(landing){body.y=landing.y-body.h;body.vy=0;body.grounded=true;body.support=landing;}
  }
  updateBullets(world,dt){
@@ -149,14 +171,20 @@ class RomCollision extends S.SpiritsCollision {
 class RomCityWorld extends GameWorld {
  constructor(seed=1337){super(seed);}
  reset(state='playing',lives=30){
-  super.reset(state,clamp(Number(lives)||30,1,30));this.stageId='city';this.frame=0;this.level=new RomCityLevel();this.level.removedWalls=[];this.level.artRevision=0;this.player=new RomPlayer();this.collision=new RomCollision();this.enemies=[];this.capsules=[];this.pickups=[];this.gates=[];this.eventIndex=0;this.runnerEnabled=false;this.nextRunner=Infinity;this.nextSpawn=Infinity;this.bombFlash=0;
+  super.reset(state,clamp(Number(lives)||30,1,30));this.stageId='city';this.frame=0;this.level=new RomCityLevel();this.level.removedWalls=[];this.level.artRevision=0;this.player=new RomPlayer();this.collision=new RomCollision();this.enemies=[];this.capsules=[];this.pickups=[];this.gates=[];this.eventIndex=0;this.runnerEnabled=false;this.nextRunner=Infinity;this.nextSpawn=Infinity;this.bombFlash=0;this.encounterQuietUntil=0;
   const boss=new TortoiseBoss();
   this.boss={x:7064,activated:false,alive:true,parts:[boss]};
  }
  addScore(value){S.SpiritsWorld.prototype.addScore.call(this,value);}
  bomb(){return S.SpiritsWorld.prototype.bomb.call(this);}
  hurtPlayer(fall=false){const hit=super.hurtPlayer(fall);if(hit){this.player.bombs=1;this.player.clinging=null;this.player.gripCooldown=.3;}return hit;}
- respawn(){super.respawn();this.player.resize(12,40);this.player.y+=10;this.player.invincible=S.PROTECTION.respawnFrames/60;}
+ respawn(){super.respawn();this.player.invincible=S.PROTECTION.respawnFrames/60;}
+ clearEncounter(boss){
+  // The death transition clears combatants before any remaining bullet can hit the player.
+  for(const e of this.enemies)if(e!==boss&&e.alive&&!e.isBoss&&e.x<this.camera+320&&e.x+e.w>this.camera-64){e.alive=false;this.emit('explosion',{x:e.cx,y:e.cy});}
+  for(const b of this.bullets)if(b.team==='enemy')b.alive=false;
+  this.nextRunner=this.time+2;this.encounterQuietUntil=this.time+2;
+ }
  spawnEvents(){
   while(this.eventIndex<DATA.events.length&&DATA.events[this.eventIndex].trigger<=this.camera){const e=DATA.events[this.eventIndex++],x=e.trigger+e.screenX;
    if(e.type===15)this.capsules.push(new RomCapsule(e));
@@ -166,7 +194,7 @@ class RomCityWorld extends GameWorld {
    else if(e.type===4){const gate=new RomGate(e);this.gates.push(gate);this.enemies.push(gate);}
    else if(e.type===11){this.runnerEnabled=true;this.nextRunner=this.time+1.0;}
   }
-  if(this.runnerEnabled&&this.time>=this.nextRunner&&this.camera<this.level.width-320){
+  if(this.runnerEnabled&&this.time>=this.nextRunner&&this.time>=(this.encounterQuietUntil||0)&&this.camera<this.level.width-320){
    this.nextRunner=this.time+(62+Math.floor(this.random.next()*56))/60;
    const facing=this.random.next()<.28?1:-1,x=this.camera+(facing===1?-16:272),surface=this.level.platforms.filter(p=>p.active&&x>=p.x&&x<p.x+p.w&&p.y>=128).sort((a,b)=>b.y-a.y)[0];
    if(surface)this.enemies.push(new RomEnemy(x,surface.y,'runner',facing));
