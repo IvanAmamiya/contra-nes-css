@@ -1,6 +1,6 @@
 # 参考与素材来源
 
-本项目为使用原生 JavaScript 重新实现的《魂斗罗》一代首关练习，不是 Konami 官方产品。
+本项目为使用原生 JavaScript 重新实现的《魂斗罗》一代首关练习及《魂斗罗精神》FC 风格扩展，不是 Konami 官方产品。
 
 参考项目：[vermiceli/nes-contra-us](https://github.com/vermiceli/nes-contra-us/tree/687d651c021fd7020f10d05b970ccb62663c94bd)。本次核对版本：`687d651c021fd7020f10d05b970ccb62663c94bd`。
 
@@ -12,11 +12,19 @@
 
 原始 CHR 浏览器保留 NES 色号，并用 [FCEUX.pal](https://github.com/TASEmulators/fceux/blob/master/output/palettes/FCEUX.pal) 的 64 色 RGB 表显示。NES 模拟输出没有唯一的 RGB 对照；地图/精灵的 CSS 转换保留各自来源图像的颜色，CHR 浏览器明确采用 FCEUX 调色板。
 
-游戏画面使用 **DOM + CSS 硬边渐变与像素阴影**，素材浏览页还使用 CSS box-shadow。PNG/GIF 仅作为构建输入和校验依据，游戏不加载位图，也不使用 Canvas、SVG 或 WebGL。音效仍为程序合成。页面普通文字使用系统字体。
+游戏画面使用 **DOM + CSS 硬边渐变与像素阴影**，素材浏览页还使用 CSS box-shadow。PNG/GIF 仅作为构建输入和校验依据，游戏不加载位图，也不使用 Canvas、SVG 或 WebGL。NES 音效为程序合成；扩展的采样来源见下文。页面普通文字使用系统字体。
 
 原作名称、角色和图像属于 Konami。此处记录来源，不对原作资产授予额外许可。本包没有附带原版 ROM 或原版音乐。
 
 逻辑参照位置与具体异同见 [SOURCE_COMPARISON.md](SOURCE_COMPARISON.md)。
+
+## Contra III / 魂斗罗精神扩展
+
+场景和 Boss 原图由 Rick N. Bruns / [SNES Maps](https://www.snesmaps.com/maps/Contra3/sprites/Contra3Sprites.html) 整理，原作美术属于 Konami。`assets/sfc-source/sources.json` 记录 16 个源文件的 URL 和 SHA-256。原文件仅用于构建，运行时使用经过裁切、缩小、调色、16×16 属性区配色限制的 CSS 图块。此扩展的美术转换有意改变源像素；NES 模式仍保留原像素。
+
+四种短 BRR 采样来自 [brickblock369 在 SMW Central 发布的 Contra III 音色包](https://www.smwcentral.net/?p=section&a=details&id=39178)，原音频属于 Konami。保留 Kick Drum、Snare Drum、Noise、Death Scream SFX；转换为单声道低精度 delta 音频，最长 0.28 秒。来源、哈希和转换详情在 `assets/spirits-audio.json`。背景编曲为此工程新写的 FC 风格序列，没有收录完整原版音乐。
+
+另参考 [Vitor Vilela 的 Contra III SA-1 Root](https://github.com/VitorVilela7/SA1-Root/blob/master/Contra-III/README.md)（提交 `2a552ce891ee3b3d780fca446e5473463fd236f9`）的性能与设置保存目标，以及 [Nintendo 托管的官方说明书](https://www.nintendo.co.jp/clvs/manuals/common/pdf/CLV-P-SACCE.pdf) 中的武器和操作说明。没有移植 SA-1 汇编或应用 ROM 补丁。详细异同见 [SPIRITS.md](SPIRITS.md)。
 
 
 首关逻辑源表来自同一提交的 `src/bank2.asm`（13 屏压缩索引、30 个固定对象记录）与 `src/bank3.asm`（super-tile 组成）。数据快照在 `assets/stage1-source.json`，生成结果在 `assets/stage1.json`，记录提交与 SHA-256。水域、地面采用原版 16 像素间隔的碰撞采样；固定对象按卷轴位置触发，飞行胶囊额外应用 `bank0.asm` 的左侧入场位置。

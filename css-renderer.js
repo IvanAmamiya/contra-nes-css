@@ -2,6 +2,7 @@
   'use strict';
   const { WIDTH, HEIGHT } = window.ContraCore;
   const assets = window.ContraAssets.assets, bg = window.ContraBackgrounds;
+  Object.assign(assets,window.SpiritsArt?.assets||{});
   const px = n => `${Math.round(n)}px`;
   function element(className, parent) { const el = document.createElement('div'); el.className = className; if (parent) parent.appendChild(el); return el; }
   function move(el, x, y, suffix = '') { const value = `translate(${px(x)},${px(y)})${suffix}`; if (el.style.transform !== value) el.style.transform = value; }
@@ -36,6 +37,9 @@
       const logo=CssTiles.patch('logo');logo.classList.add('contra-logo');this.titleLayer.appendChild(logo);move(logo,32,30);
       const heroes=CssTiles.patch('heroes');this.titleLayer.appendChild(heroes);move(heroes,150,126);
       const caption=element('title-caption',this.titleLayer);caption.textContent='FIRST STAGE';
+      if(window.ContraSpirits)caption.textContent='CONTRA SPIRITS / FC EDITION';
+      this.bossMeter=element('spirits-boss-meter',this.stage);this.bossMeter.hidden=true;
+      this.bombLayer=element('spirits-bomb-flash',this.stage);this.bombLayer.hidden=true;
       this.pool = []; this.time=0; this.effects=[]; this.level=null; this.bridges=[];
       this.ready = Promise.resolve(true);
       this.resize = () => { const r=viewport.getBoundingClientRect(); this.stage.style.transform=`scale(${r.width/WIDTH},${r.height/HEIGHT})`; };
@@ -50,20 +54,23 @@
         const visual=CssTiles.patch(object.kind==='turret'?object.visual:'crate');this.land.appendChild(visual);move(visual,object.cx-16,object.cy-16);this.fixed.push([object,visual]);
       }
       this.bossFaces=[];
-      for(const part of world.boss.parts){const holder=element('css-boss-part',this.land);move(holder,part.x,part.y);holder.style.width=px(part.w);holder.style.height=px(part.h);this.bossFaces.push([part,holder]);}
+      if(world.level.data.spirits){
+        for(const p of world.level.platforms){const el=element(`spirits-platform ${world.level.id}`,this.land);move(el,p.x,p.y);el.style.width=px(p.w);el.style.height=px(p.h);}
+        for(const g of world.level.grips){const el=element('spirits-grip '+g.type,this.land);move(el,g.x,g.y);el.style.width=px(g.w);el.style.height=px(g.h);}
+      }else for(const part of world.boss.parts){const holder=element('css-boss-part',this.land);move(holder,part.x,part.y);holder.style.width=px(part.w);holder.style.height=px(part.h);this.bossFaces.push([part,holder]);}
     }
     drawMap(cam) {
       const art=this.level.data.art,column=Math.floor(cam/32);
       if(column!==this.chunkColumn){this.chunkColumn=column;for(let y=0;y<7;y++)for(let x=0;x<10;x++){
         const el=this.chunks[y*10+x],col=column+x;el.hidden=col>=art.cols;if(el.hidden)continue;
-        el.className='stage-chunk stage-chunk-'+art.chunks[y*art.cols+col];move(el,col*32,y*32);
+        el.className='stage-chunk '+(art.prefix||'stage-chunk-')+art.chunks[y*art.cols+col];move(el,col*32,y*32);
       }}
     }
     sprite(id,x,y,face=1,flipY=false) {
       const a=assets[id];if(!a)return;
       let el=this.pool[this.used];if(!el){el=element('',this.actors);this.pool.push(el);}this.used++;
       const cls=`nes-art art-${id}`;if(el.className!==cls)el.className=cls;
-      el.hidden=false;move(el,x+(face<0?a.width:0),y+(flipY?a.height:0),` scale(${face},${flipY?-1:1})`);
+      el.hidden=false;el.style.filter='';move(el,x+(face<0?a.width:0),y+(flipY?a.height:0),` scale(${face},${flipY?-1:1})`);return el;
     }
     human(actor,cam,player=false) {
       if(player&&(actor.respawnTimer>0||!actor.alive||actor.invincible>0&&Math.floor(this.time*16)%2))return;
@@ -72,7 +79,8 @@
       else if(actor.submerged)id='19';
       else if(actor.inWater)id=Math.abs(Math.cos(actor.aim))<.05?'1b':Math.sin(actor.aim)<-.1?'1c':'1d';
       else if(actor.prone)id='17';
-      else if(!actor.grounded){const r=Math.floor(this.time*12)%4;id=r%2?'09':'08';flip=r>=2;}
+      else if(actor.clinging)id='16';
+      else if(actor.spinning||!actor.grounded){const r=Math.floor(this.time*12)%4;id=r%2?'09':'08';flip=r>=2;}
       else if(Math.abs(Math.cos(actor.aim))<.05)id='16';
       else if(Math.sin(actor.aim)<-.1)id=['10','11','12'][frame%3];
       else if(Math.sin(actor.aim)>.1)id=['13','14','15'][frame%3];
@@ -93,7 +101,7 @@
       if(world.state==='playing'||world.state==='title')this.time+=dt;
       const title=world.state==='title';this.titleLayer.hidden=!title;
       this.background.hidden=title;this.land.hidden=title;this.actors.hidden=title;this.hud.hidden=title;
-      this.overlay.hidden=true;if(title)return;
+      this.overlay.hidden=true;if(title){this.bossMeter.hidden=true;this.bombLayer.hidden=true;return;}
       if(this.level!==world.level)this.buildLevel(world);
       const cam=Math.floor(world.camera);move(this.land,-cam,0);
       this.drawMap(cam);
@@ -103,12 +111,13 @@
       this.used=0;
       for(const capsule of world.capsules){if(!capsule.flying||capsule.spawnCamera>world.camera||capsule.x-cam>WIDTH+24||capsule.x-cam<-32)continue;const a=assets.sprite_4d;this.sprite('sprite_4d',capsule.cx-cam-a.width/2,capsule.cy-a.height/2);}
       const pickupId={S:'2f',B:'30',F:'31',L:'32',R:'33',M:'34'};
-      for(const p of world.pickups){const id=`sprite_${pickupId[p.code]||'34'}`,a=assets[id];this.sprite(id,p.cx-cam-a.width/2,p.y+p.h-a.height);}
+      for(const p of world.pickups){const id=world.level.data.spirits&&assets['spirits_'+p.code]?'spirits_'+p.code:`sprite_${p.code==='bomb'?'30':pickupId[p.code]||'34'}`,a=assets[id];this.sprite(id,p.cx-cam-a.width/2,p.y+p.h-a.height);}
       for(const e of world.enemies){if(e.kind==='turret'||e.spawnCamera>world.camera||e.x-cam<-40||e.x-cam>WIDTH+24)continue;this.human(e,cam);}
+      if(world.level.data.spirits)for(const b of world.boss.parts){if(!b.alive||b.x-cam>256)continue;const id=b.kind==='armored'&&b.phase===2?'spirits_brain':'spirits_'+b.kind,a=assets[id];const el=this.sprite(id,b.cx-cam-a.width/2,b.y+b.h-a.height);if(el&&(b.flash>0||b.telegraph))el.style.filter=b.flash>0?'brightness(2)':'brightness(1.35)';}
       this.human(world.player,cam,true);
       for(const b of world.bullets){
         if(b.delay>0)continue;let id='1e',face=1,flip=false;
-        if(b.team==='enemy')id=b.kind==='cannon'?'21':'1e';else if(b.kind==='fire')id='22';else if(b.kind==='laser'){id=Math.abs(Math.cos(b.angle))<.05?'23':Math.abs(Math.sin(b.angle))<.05?'24':'25';face=Math.cos(b.angle)<0?-1:1;flip=Math.sin(b.angle)>0;}
+        if(b.team==='enemy')id=b.kind==='cannon'?'21':'1e';else if(b.kind==='fire'||b.kind==='flame')id='22';else if(b.kind==='homing')id='20';else if(b.kind==='crush')id='21';else if(b.kind==='laser'){id=Math.abs(Math.cos(b.angle))<.05?'23':Math.abs(Math.sin(b.angle))<.05?'24':'25';face=Math.cos(b.angle)<0?-1:1;flip=Math.sin(b.angle)>0;}
         else if(b.kind==='spread'){const frame=Math.floor(b.age*60+1e-7);id=frame<16?'1f':frame<32?'20':'21';}else if(b.kind==='machine')id='1f';
         id=`sprite_${id}`;const a=assets[id];this.sprite(id,b.cx-cam-a.width/2,b.cy-a.height/2,face,flip);
       }
@@ -118,7 +127,10 @@
       for(let i=this.used;i<this.pool.length;i++)this.pool[i].hidden=true;
       const reserves=Math.max(0,world.lives-1),key=String(reserves);
       if(this.hud.dataset.lives!==key){this.hud.dataset.lives=key;this.hud.replaceChildren();for(let i=0;i<Math.min(8,reserves);i++){const el=element('nes-art art-player_1_lives_medal',this.hud);move(el,8+i*9,5);}if(reserves>8){const n=element('reserve-count',this.hud);n.textContent=key;}}
-      const message=world.clearTimer>0||world.state==='won'?'STAGE 1 CLEAR':world.state==='paused'?'PAUSE':world.state==='gameover'?'GAME OVER':'';
+      this.bossMeter.hidden=!world.level.data.spirits||!world.boss.activated||!world.boss.alive;
+      if(!this.bossMeter.hidden){const hp=world.boss.parts.reduce((n,p)=>n+p.hp,0),max=world.boss.parts.reduce((n,p)=>n+p.maxHp,0);this.bossMeter.textContent='BOSS '+Math.ceil(hp/max*100)+'%';this.bossMeter.style.borderBottomWidth=px(2);this.bossMeter.style.width=px(72*hp/max);}
+      this.bombLayer.hidden=!(world.bombFlash>0);
+      const message=world.clearTimer>0||world.state==='won'?`STAGE ${world.level.info?.number||1} CLEAR`:world.state==='paused'?'PAUSE':world.state==='gameover'?'GAME OVER':'';
       if(message){this.overlay.hidden=false;if(this.overlay.textContent!==message)this.overlay.textContent=message;}
     }
     destroy(){this.observer.disconnect();this.stage.remove();}

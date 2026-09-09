@@ -1,0 +1,11 @@
+{
+  "playing": {
+    "activeVoices": 1,
+    "audioState": "running",
+    "sampleBuffers": 4,
+    "stage": "city"
+  },
+  "stopped": {
+    "activeVoices": 0
+  }
+}

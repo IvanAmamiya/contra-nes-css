@@ -10,3 +10,6 @@ dist
 assets/source
 assets/background-source
 tests/*.test.cjs
+
+assets/sfc-source
+assets/audio-source

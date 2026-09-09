@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Stage1BossBeastKimkoh.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/Stage1BossBeastKimkoh.png",
+    "bytes": 5620,
+    "sha256": "c1da48f24107ebde5208b63cb82697ae5460063e63422f036ca76f47fb00cadf"
+  },
+  {
+    "name": "Stage3BossBOB1.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/Stage3BossBOB1.png",
+    "bytes": 1048,
+    "sha256": "94586e85d58042435fea17f6d4e7f42e817ea0e26cb2e026198fd28a5a917565"
+  },
+  {
+    "name": "Stage3BossBOB2.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/Stage3BossBOB2.png",
+    "bytes": 1043,
+    "sha256": "71764cc5fb3987ddd59fff498c211543dba485964f004ddc274a75c6337ffb8a"
+  },
+  {
+    "name": "Stage6BossAlienBrain.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/Stage6BossAlienBrain.png",
+    "bytes": 1030,
+    "sha256": "71fd861192fcbcbb5d8e51696ac43131a0c9113f03f758f446c2e33499e753f1"
+  },
+  {
+    "name": "Stage6BossArmoredAlienBrain.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/Stage6BossArmoredAlienBrain.png",
+    "bytes": 5004,
+    "sha256": "a6ff5aaa1c44deaac22bcdfec5ad24e407e2d7c8ab31be0fae02ec16933e8940"
+  },
+  {
+    "name": "Stage6BossGiantAlienHeart.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/Stage6BossGiantAlienHeart.png",
+    "bytes": 3666,
+    "sha256": "d3ea6868437c95b7b99b1b0aafd20e93c70f9851b70d02686c22200f204299ca"
+  },
+  {
+    "name": "HighSpeedTankBooby.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/HighSpeedTankBooby.png",
+    "bytes": 1331,
+    "sha256": "458f0f0114997fa4d3046263ef3b602ab768cd60cc5fb64d4cd34d3dc9da3806"
+  },
+  {
+    "name": "HomingGun.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/HomingGun.png",
+    "bytes": 252,
+    "sha256": "92f1baf62bf42fc9564d10db2049cf293ea0729a7fba646b6c4be57ccb862003"
+  },
+  {
+    "name": "CrushGun.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/CrushGun.png",
+    "bytes": 258,
+    "sha256": "cb9d5c1b6acd19f9ffb5229d6d76f45d9e811374e6ce966414728a72bf15dd49"
+  },
+  {
+    "name": "Barrier.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/Barrier.png",
+    "bytes": 252,
+    "sha256": "2a80e5910b1bc0319eac5cfdafa1880abef9d3688a43d62e3ad86df9916c5bfd"
+  },
+  {
+    "name": "FireGun.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/FireGun.png",
+    "bytes": 257,
+    "sha256": "c2fd14a53bac1d17d9ca85adbdfcdc744352e72d335714b4d97c0018846519ae"
+  },
+  {
+    "name": "LaserGun.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/LaserGun.png",
+    "bytes": 256,
+    "sha256": "2bc83d00cb82614b55228ecc27f793db0c93a495d96651d8e434a9e79ee14b14"
+  },
+  {
+    "name": "SpreadGun.png",
+    "url": "https://www.snesmaps.com/maps/Contra3/sprites/SpreadGun.png",
+    "bytes": 259,
+    "sha256": "2eb08afcad7e15c233cbbf5416669f89b309b61ec4f38c9127b770352244dfc2"
+  },
+  {
+    "name": "stage1.png",
+    "url": "https://snesmaps.com/maps/Contra3/Contra3Stage1MapBG.png",
+    "bytes": 121623,
+    "sha256": "f4bf6e82f9c8a341cd2de7e89957abc0f5aaeec9075e5dcb55dceaa14c9b25cb"
+  },
+  {
+    "name": "stage3.png",
+    "url": "https://snesmaps.com/maps/Contra3/Contra3Stage3MapBG.png",
+    "bytes": 160701,
+    "sha256": "de9909e1d283ef7a3f43619cb51d35d253efe266447d9e1742febe2303e361c7"
+  },
+  {
+    "name": "stage6.png",
+    "url": "https://snesmaps.com/maps/Contra3/Contra3Stage6MapBG.png",
+    "bytes": 169651,
+    "sha256": "e757e15e548b898ee0aa5745cef193572044dfe39088e84a3fa4a74498055c3f"
+  }
+]

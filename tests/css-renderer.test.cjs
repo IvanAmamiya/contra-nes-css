@@ -1,8 +1,9 @@
 'use strict';
 const{test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),Core=require('../core.js');
-function boot(){
+function boot(expanded=false){
   let observer;class Element{constructor(){this.children=[];this.style={};this.dataset={};this.hidden=false;this.className='';this.classList={add:c=>this.className+=' '+c,toggle:(c,on)=>{const s=new Set(this.className.split(' '));on?s.add(c):s.delete(c);this.className=[...s].join(' ');}};}appendChild(e){this.children.push(e);e.parent=this;}replaceChildren(...es){this.children=es;for(const e of es)e.parent=this;}setAttribute(){}getBoundingClientRect(){return{width:768,height:672};}remove(){this.parent.children=this.parent.children.filter(x=>x!==this);}}
   const window={ContraCore:Core,ContraAssets:require('../assets/manifest.json'),ContraBackgrounds:require('../assets/backgrounds.json')},document={createElement:()=>new Element()};
+  if(expanded){window.SpiritsArt=require('../assets/spirits-art.json');window.ContraSpirits=require('../spirits-core.js');}
   const ResizeObserver=class{constructor(fn){observer=this;this.fn=fn;}observe(){}disconnect(){this.disconnected=true;}};
   vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../css-renderer.js'),'utf8'),{window,document,ResizeObserver,Promise,Math});
   const viewport=new Element(),renderer=new window.ContraRenderer(viewport),world=new Core.GameWorld();
@@ -13,6 +14,7 @@ test('2000次重复渲染复用节点，暂停不推进动作与效果',()=>{con
 test('趴下、潜水、斜上射击均引用原版精灵',()=>{const{renderer:r,world:w}=boot();w.reset('playing');w.player.invincible=0;w.player.prone=true;w.player.grounded=true;r.draw(w,0);assert.ok(r.pool.some(e=>e.className.includes('sprite_17')));w.player.inWater=true;w.player.submerged=true;r.draw(w,0);assert.ok(r.pool.some(e=>!e.hidden&&e.className.includes('sprite_19')));w.player.submerged=false;w.player.aim=-Math.PI/4;r.draw(w,0);assert.ok(r.pool.some(e=>!e.hidden&&e.className.includes('sprite_1c')));});
 test('断桥显示空洞，已击毁炮台和碉堡部件停止显示',()=>{const{renderer:r,world:w}=boot();w.reset('playing');r.draw(w,0);r.bridges[0][0].active=false;r.fixed[0][0].alive=false;r.bossFaces[0][0].alive=false;r.draw(w,0);assert.equal(r.bridges[0][1].hidden,false);assert.equal(r.fixed[0][1].hidden,true);assert.ok(r.bossFaces[0][1].className.includes('destroyed'));});
 test('渲染器销毁时释放观察器与场景',()=>{const{renderer:r,viewport,observer}=boot();r.destroy();assert.equal(viewport.children.length,0);assert.equal(observer.disconnected,true);});
+test('三关新Boss、平台、攀附姿势与标题切换；重复重建保持节点有界',()=>{const{renderer:r,count}=boot(true),S=require('../spirits-core.js');for(let i=0;i<60;i++){const w=new S.SpiritsWorld(S.STAGES[i%3].id);w.reset();w.camera=1024;w.boss.activated=true;w.player.invincible=0;w.player.clinging={type:'ceiling'};r.draw(w,0);assert.ok(r.pool.some(e=>!e.hidden&&e.className==='nes-art art-sprite_16'));assert.ok(r.pool.some(e=>!e.hidden&&e.className.includes('art-spirits_')));assert.ok(r.chunks.some(c=>c.className.includes('spirits-chunk-'+w.level.id)));assert.equal(r.bossMeter.hidden,false);assert.ok(count(r.stage)<180);w.state='title';r.draw(w,0);assert.equal(r.bossMeter.hidden,true);assert.equal(r.bombLayer.hidden,true);}});
 
 test('真实S枪生成的五颗弹在第16、32帧切换原版三段大小',()=>{
   const{renderer:r,world:w}=boot();w.reset('playing');w.enemies=[];w.capsules=[];
